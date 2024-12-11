@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Incidentify</string>
+    <string name="login_identifier_hint">Identifier</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_access">Access</string>
 </resources>
