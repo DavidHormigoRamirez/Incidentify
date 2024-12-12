@@ -3,4 +3,8 @@
     <string name="login_identifier_hint">Identifier</string>
     <string name="login_password_hint">Password</string>
     <string name="login_access">Access</string>
+    <string name="login_error">Incorrect user or password</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="login_register">Don\'t have an account? Register</string>
+    <string name="login_email_hint">email</string>
 </resources>
