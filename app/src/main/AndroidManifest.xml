@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Incidentify" >
         <activity
-            android:name=".login.ui.AuthenticationActivity"
+            android:name=".authentication.ui.AuthenticationActivity"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

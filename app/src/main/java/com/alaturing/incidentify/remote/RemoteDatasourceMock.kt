@@ -2,7 +2,7 @@ package com.alaturing.incidentify.remote
 
 import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.exception.UserNotRegisteredException
-import com.alaturing.incidentify.login.data.User
+import com.alaturing.incidentify.authentication.data.model.User
 import kotlinx.coroutines.delay
 import java.util.UUID
 import javax.inject.Inject
