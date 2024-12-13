@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui.register
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
-    private val viewModel:RegisterViewModel by viewModels()
+    private val viewModel: RegisterViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

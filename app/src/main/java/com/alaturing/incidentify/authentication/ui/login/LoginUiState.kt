@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui.login
 
 /**
  * Clase sellada que representa los estados de la pantalla de login en función
@@ -10,8 +10,8 @@ package com.alaturing.incidentify.login.ui
  * Error: Hay un error en la autenticación
  */
 sealed class LoginUiState {
-    data object Initial:LoginUiState()
-    data object LoggingIn:LoginUiState()
-    data object LoggedIn:LoginUiState()
-    data class Error(val errorMessage:String):LoginUiState()
+    data object Initial: LoginUiState()
+    data object LoggingIn: LoginUiState()
+    data object LoggedIn: LoginUiState()
+    data class Error(val errorMessage:String): LoginUiState()
 }

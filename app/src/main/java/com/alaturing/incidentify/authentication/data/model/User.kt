@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.login.data
+package com.alaturing.incidentify.authentication.data.model
 
 data class User(
     val id:Int,

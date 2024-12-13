@@ -1,8 +1,8 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alaturing.incidentify.login.data.UserRepository
+import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

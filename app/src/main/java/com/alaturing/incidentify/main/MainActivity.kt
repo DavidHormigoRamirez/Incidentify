@@ -8,6 +8,9 @@ import androidx.core.view.WindowInsetsCompat
 import com.alaturing.incidentify.R
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Implementación de [AppCompatActivity] para albergar la funcionalidad general de la aplicación
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

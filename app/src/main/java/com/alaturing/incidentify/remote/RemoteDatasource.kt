@@ -1,6 +1,6 @@
 package com.alaturing.incidentify.remote
 
-import com.alaturing.incidentify.login.data.User
+import com.alaturing.incidentify.authentication.data.model.User
 
 interface RemoteDatasource {
 

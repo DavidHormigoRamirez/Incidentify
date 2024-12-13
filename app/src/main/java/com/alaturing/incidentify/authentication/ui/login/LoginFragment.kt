@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -25,7 +25,7 @@ class LoginFragment : Fragment() {
     // Enlace a los elementos de pantalla
     private lateinit var binding: FragmentLoginBinding
     // Estado de la pantalla
-    private val viewModel:LoginViewModel by viewModels()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

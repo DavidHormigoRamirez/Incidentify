@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

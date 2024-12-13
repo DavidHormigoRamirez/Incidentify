@@ -1,10 +1,9 @@
-package com.alaturing.incidentify.login.ui
+package com.alaturing.incidentify.authentication.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alaturing.incidentify.login.data.UserRepository
+import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +15,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val repository:UserRepository
+    private val repository: UserRepository
 ): ViewModel()
 {
     private val _uiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Initial)
