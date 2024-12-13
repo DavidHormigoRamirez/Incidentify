@@ -10,7 +10,7 @@ import javax.inject.Inject
  * ser muy parecida a una implementación real ya que la gestión
  * de token, registro o login se hace en los datasources
  */
-class UserRepositoryMock @Inject constructor(
+class UserRepositoryDefault @Inject constructor(
     private val remote:RemoteDatasource,
     private val local: UserLocalDatasource
 ): UserRepository {
