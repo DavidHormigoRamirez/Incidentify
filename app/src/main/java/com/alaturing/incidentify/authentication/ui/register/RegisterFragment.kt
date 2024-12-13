@@ -11,6 +11,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.alaturing.incidentify.common.validation.isNotEmpty
+import com.alaturing.incidentify.common.validation.sameContent
 import com.alaturing.incidentify.databinding.FragmentRegisterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -31,14 +33,27 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.registerBtn.setOnClickListener {
-            val userName = binding.identifierInput.text.toString()
-            val email = binding.emailInput.text.toString()
-            val password = binding.passwordInput.text.toString()
-            viewModel.onRegister(userName, email, password)
+
+            if ((binding.passwordInput.isNotEmpty(binding.passwordLabel) ||
+                binding.passwordRepeatInput.isNotEmpty(binding.passwordRepeatLabel) ||
+                binding.emailInput.isNotEmpty(binding.emailLabel) ||
+                binding.identifierInput.isNotEmpty(binding.identifierLabel)) &&
+                binding.passwordInput.sameContent(
+                    binding.passwordRepeatInput,
+                    binding.passwordLabel,
+                    binding.passwordRepeatLabel
+                ))
+            {
+                val userName = binding.identifierInput.text.toString()
+                val email = binding.emailInput.text.toString()
+                val password = binding.passwordInput.text.toString()
+                viewModel.onRegister(userName, email, password)
+            }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
