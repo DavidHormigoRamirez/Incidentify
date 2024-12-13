@@ -91,25 +91,24 @@ class LoginFragment : Fragment() {
         val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
         v.findNavController().navigate(action)
     }
-    private fun hideProgress() { binding.loginProgressIndicator.isVisible = false }
-    private fun showProgress() { binding.loginProgressIndicator.isVisible = true }
-    private fun disableInput() {
-        binding.loginBtn.isEnabled = false
-        binding.passwordInput.isEnabled = false
-        binding.identifierInput.isEnabled = false
+    private fun setProgress(isVisible:Boolean) {
+        binding.loginProgressIndicator.isVisible = isVisible
     }
-    private fun enableInput() {
-        binding.loginBtn.isEnabled = true
-        binding.passwordInput.isEnabled = true
-        binding.identifierInput.isEnabled = true
+    private fun hideProgress() = setProgress(false)
+    private fun showProgress() = setProgress(true)
+    private fun setInputState(enable:Boolean) {
+        binding.loginBtn.isEnabled = enable
+        binding.passwordInput.isEnabled = enable
+        binding.identifierInput.isEnabled = enable
     }
-    private fun showError(message:String) {
+    private fun disableInput() = setInputState(false)
+    private fun enableInput() = setInputState(true)
+    private fun setError(message:String?=null) {
         binding.passwordLabel.error = message
         binding.identifierLabel.error = message
     }
-    private fun hideError() {
-        binding.passwordLabel.error = null
-        binding.identifierLabel.error = null
-    }
+    private fun showError(message:String) = setError(message)
+
+    private fun hideError() = setError()
 
 }
