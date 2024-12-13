@@ -23,10 +23,15 @@ class RegisterViewModel @Inject constructor(
     val uiState:StateFlow<RegisterUiState>
         get() = _uiState.asStateFlow()
 
+    /**
+     * Método para manejar la petición de registro
+     * @param userName
+     * @param email
+     * @param password
+     */
     fun onRegister(userName:String,email:String,password:String) {
         viewModelScope.launch {
             _uiState.value = RegisterUiState.Registering
-            delay(2000L)
             val result = repository.register(userName,email,password)
             if (result.isFailure) {
                 result.exceptionOrNull()?.let {
