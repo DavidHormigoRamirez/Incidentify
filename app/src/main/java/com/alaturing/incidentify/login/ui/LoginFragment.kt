@@ -86,7 +86,7 @@ class LoginFragment : Fragment() {
             }
         }
     }
-    private fun toMain() = startActivity(Intent(requireContext(),MainActivity::class.java))
+    private fun toMain() = startActivity(Intent(requireContext(), MainActivity::class.java))
     private fun toRegister(v:View) {
         val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
         v.findNavController().navigate(action)
