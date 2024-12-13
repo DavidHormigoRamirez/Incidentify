@@ -5,4 +5,5 @@ data class User(
     val userName:String,
     val email:String,
     val password:String, // TODO quitar este campo
+    var token: String?
 )
