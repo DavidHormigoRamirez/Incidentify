@@ -1,11 +1,11 @@
 package com.alaturing.incidentify.di
 
 import com.alaturing.incidentify.authentication.data.repository.UserRepository
-import com.alaturing.incidentify.authentication.data.repository.UserRepositoryMock
+import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceMock
 import com.alaturing.incidentify.remote.RemoteDatasource
-import com.alaturing.incidentify.remote.RemoteDatasourceMock
+import com.alaturing.incidentify.remote.RemoteDatasourceStrapi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,14 +25,15 @@ abstract class AppModule {
      */
     @Binds
     @Singleton
-    abstract fun bindMockUserRepository(r: UserRepositoryMock): UserRepository
+    abstract fun bindMockUserRepository(r: UserRepositoryDefault): UserRepository
 
     /**
      * Provee la fuente de datos remota
      */
     @Binds
     @Singleton
-    abstract fun bindMockRemoteDatasource(ds:RemoteDatasourceMock):RemoteDatasource
+    //abstract fun bindMockRemoteDatasource(ds:RemoteDatasourceMock):RemoteDatasource
+    abstract fun bindStrapiRemoteDatasource(ds: RemoteDatasourceStrapi):RemoteDatasource
 
     /**
      * Provee la fuente de datos local
