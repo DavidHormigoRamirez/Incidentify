@@ -8,4 +8,6 @@
     <string name="login_register">Don\'t have an account? Register</string>
     <string name="login_email_hint">email</string>
     <string name="login_repeat_password_hint">Repeat password</string>
+    <string name="login_not_registered">User cannot be registered</string>
+    <string name="login_auth_failed">Incorrect identifier or password</string>
 </resources>

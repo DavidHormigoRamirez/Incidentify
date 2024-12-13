@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
- * A simple [Fragment] subclass.
+ *  [Fragment] para la gestión de registro de usuarios
  *
  */
 @AndroidEntryPoint
@@ -48,6 +48,7 @@ class RegisterFragment : Fragment() {
                         when (uiState) {
                             is RegisterUiState.Error -> {
                                 hideProgress()
+                                enableInput()
                                 showError(uiState.errorMessage)
                             }
                             RegisterUiState.Initial -> {

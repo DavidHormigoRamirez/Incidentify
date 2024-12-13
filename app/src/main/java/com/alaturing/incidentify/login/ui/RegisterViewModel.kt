@@ -2,7 +2,7 @@ package com.alaturing.incidentify.login.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alaturing.incidentify.login.data.IUserRepository
+import com.alaturing.incidentify.login.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +11,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * [ViewModel] para mantener el estado de la pantalla de registro
+ */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val repository:IUserRepository
+    private val repository:UserRepository
 ): ViewModel()
 {
     private val _uiState = MutableStateFlow<RegisterUiState>(RegisterUiState.Initial)
@@ -24,8 +27,11 @@ class RegisterViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = RegisterUiState.Registering
             delay(2000L)
-            if (repository.register(userName,email,password)==null) {
-                _uiState.value = RegisterUiState.Error("User cannot be registered")
+            val result = repository.register(userName,email,password)
+            if (result.isFailure) {
+                result.exceptionOrNull()?.let {
+                _uiState.value = RegisterUiState.Error(it.toString())
+                }
             }
             else {
                 _uiState.value = RegisterUiState.Registered
