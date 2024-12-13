@@ -2,7 +2,7 @@ package com.alaturing.incidentify.login.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.alaturing.incidentify.login.data.IUserRepository
+import com.alaturing.incidentify.login.data.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,7 +17,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepository: IUserRepository
+    private val userRepository: UserRepository
 ): ViewModel() {
 
     private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Initial)
@@ -33,14 +33,12 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _uiState.value = LoginUiState.LoggingIn
 
-            val user = userRepository.login(identifier,password)
-            if (user!=null) {
-                _uiState.value = LoginUiState.LoggedIn
-            }
+            val result = userRepository.login(identifier,password)
+            if (result.isSuccess) _uiState.value = LoginUiState.LoggedIn
             else
-            {
-                _uiState.value = LoginUiState.Error("Incorrect user or password")
-            }
+                result.exceptionOrNull()?.let {
+                    _uiState.value = LoginUiState.Error(it.toString())
+                }
 
         }
     }
