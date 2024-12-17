@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
+
+
+
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -7,17 +12,29 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <ImageView
+            android:id="@+id/evidence_image"
+            android:layout_width="match_parent"
+            android:layout_height="194dp"
+            android:scaleType="centerCrop"
+            android:contentDescription="Evidence of the incident"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp">
         <TextView
             android:id="@+id/incident_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Headline"
+            style="@style/TextAppearance.Material3.TitleMedium"
             tools:text="Pomo roto"/>
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/incident_status"
             android:text="@string/solved"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+    </LinearLayout>
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

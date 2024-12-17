@@ -44,6 +44,10 @@ android {
 
 dependencies {
 
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

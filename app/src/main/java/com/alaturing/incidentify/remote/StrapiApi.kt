@@ -8,6 +8,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * API del remoto para Retrofit
@@ -19,10 +20,10 @@ interface StrapiApi: StrapiAuthenticationApi,
  * Autenticación
  */
 interface StrapiAuthenticationApi {
-    @POST("auth/local")
+    @POST("/api/auth/local")
     suspend fun login(@Body body: AuthRequestBody):Response<AuthResponseBody>
 
-    @POST("auth/local/register")
+    @POST("/api/auth/local/register")
     suspend fun register(@Body body: RegisterRequestBody):Response<AuthResponseBody>
 }
 
@@ -31,9 +32,9 @@ interface StrapiAuthenticationApi {
  */
 interface  StrapiIncidentApi {
     // Incidents
-    @GET("incidents")
-    suspend fun incidentReadAll():Response<IncidentsResponseBody>
+    @GET("/api/incidents")
+    suspend fun incidentReadAll(@Query("populate") populate:String="evidence"):Response<IncidentsResponseBody>
 
-    @POST("incidents")
+    @POST("/api/incidents")
     suspend fun createIncident()
 }
