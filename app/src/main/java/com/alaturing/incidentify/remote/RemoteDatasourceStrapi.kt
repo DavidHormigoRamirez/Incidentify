@@ -1,8 +1,9 @@
 package com.alaturing.incidentify.remote
 
-import com.alaturing.incidentify.authentication.data.model.User
+import com.alaturing.incidentify.authentication.model.User
 import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.exception.UserNotRegisteredException
+import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.remote.model.AuthRequestBody
 import com.alaturing.incidentify.remote.model.RegisterRequestBody
 import com.alaturing.incidentify.remote.model.toModel
@@ -47,6 +48,16 @@ class RemoteDatasourceStrapi @Inject constructor(
         }
         else {
             Result.failure(UserNotRegisteredException())
+        }
+    }
+
+    override suspend fun readAll(): Result<List<Incident>> {
+        val response = api.incidentReadAll()
+        return if (response.isSuccessful) {
+            Result.success(response.body()!!.data.toModel())
+        }
+        else {
+            TODO()
         }
     }
 }
