@@ -13,7 +13,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
-private const val STRAPI = "https://sterling-impala-mistakenly.ngrok-free.app/api/"
+
 
 /**
  * Modulo de Hilt para la red
@@ -21,6 +21,9 @@ private const val STRAPI = "https://sterling-impala-mistakenly.ngrok-free.app/ap
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+    companion object {
+        const val STRAPI = "https://sterling-impala-mistakenly.ngrok-free.app"
+    }
 
     /**
      * Anotación para calificar el interceptor de autenticación

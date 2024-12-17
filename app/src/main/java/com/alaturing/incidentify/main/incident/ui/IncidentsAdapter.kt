@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import coil3.load
 import com.alaturing.incidentify.databinding.IncidentItemBinding
 import com.alaturing.incidentify.main.incident.model.Incident
 
@@ -19,6 +20,13 @@ class IncidentsAdapter: ListAdapter<Incident, IncidentsAdapter.IncidentViewHolde
         fun bind(i:Incident) {
             binding.incidentDescription.text = i.description
             binding.incidentStatus.isChecked = i.solved
+             if (i.smallPhotoUrl!=null) {
+                binding.evidenceImage.load(i.smallPhotoUrl)
+            }
+            else {
+                // TODO poner un placeholder
+            }
+
         }
     }
 
