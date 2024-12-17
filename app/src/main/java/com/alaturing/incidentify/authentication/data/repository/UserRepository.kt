@@ -1,6 +1,6 @@
 package com.alaturing.incidentify.authentication.data.repository
 
-import com.alaturing.incidentify.authentication.data.model.User
+import com.alaturing.incidentify.authentication.model.User
 
 interface UserRepository {
 

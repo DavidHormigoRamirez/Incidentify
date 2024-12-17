@@ -1,6 +1,6 @@
 package com.alaturing.incidentify.authentication.data.repository
 
-import com.alaturing.incidentify.authentication.data.model.User
+import com.alaturing.incidentify.authentication.model.User
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.remote.RemoteDatasource
 import javax.inject.Inject

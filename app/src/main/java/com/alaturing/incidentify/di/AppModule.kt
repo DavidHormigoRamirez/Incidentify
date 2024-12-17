@@ -4,6 +4,8 @@ import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceMock
+import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
+import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositoryDefault
 import com.alaturing.incidentify.remote.RemoteDatasource
 import com.alaturing.incidentify.remote.RemoteDatasourceStrapi
 import dagger.Binds
@@ -20,12 +22,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class AppModule {
+
+
     /**
      * Provee el repositorio de usuarios
      */
     @Binds
     @Singleton
-    abstract fun bindMockUserRepository(r: UserRepositoryDefault): UserRepository
+    abstract fun bindUserRepository(r: UserRepositoryDefault): UserRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindIncidentRepository(r:IncidentRepositoryDefault):IncidentRepository
 
     /**
      * Provee la fuente de datos remota
@@ -36,9 +44,11 @@ abstract class AppModule {
     abstract fun bindStrapiRemoteDatasource(ds: RemoteDatasourceStrapi):RemoteDatasource
 
     /**
-     * Provee la fuente de datos local
+     * Provee la fuente de datos local para usuarios
      */
     @Binds
     @Singleton
     abstract fun bindMockUserDatasourceLocal(ds:UserLocalDatasourceMock): UserLocalDatasource
+
+
 }
