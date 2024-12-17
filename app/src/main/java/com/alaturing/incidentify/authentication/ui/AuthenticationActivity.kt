@@ -9,6 +9,9 @@ import com.alaturing.incidentify.R
 import com.alaturing.incidentify.databinding.ActivityAuthenticationBinding
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * [AppCompatActivity] para alojar los fragmentos de login y registro
+ */
 @AndroidEntryPoint
 class AuthenticationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAuthenticationBinding

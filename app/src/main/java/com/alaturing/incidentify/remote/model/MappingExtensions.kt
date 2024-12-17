@@ -7,7 +7,6 @@ fun AuthResponseBody.toModel(): User {
         id = this.user.id,
         userName = this.user.username,
         email = this.user.email,
-        password = "", // TODO eliminar
         token = this.jwt
     )
 }

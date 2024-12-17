@@ -11,15 +11,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.alaturing.incidentify.common.validation.isNotEmpty
-import com.alaturing.incidentify.common.validation.sameContent
+import com.alaturing.incidentify.common.validation.isEmpty
+import com.alaturing.incidentify.common.validation.differentContent
 import com.alaturing.incidentify.databinding.FragmentRegisterBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
  *  [Fragment] para la gestión de registro de usuarios
- *
  */
 @AndroidEntryPoint
 class RegisterFragment : Fragment() {
@@ -33,21 +32,25 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-
+    private fun validateForm(): Boolean {
+        val isNotValid = binding.passwordInput.isEmpty(binding.passwordLabel) ||
+                binding.passwordRepeatInput.isEmpty(binding.passwordRepeatLabel) ||
+                binding.emailInput.isEmpty(binding.emailLabel) ||
+                binding.identifierInput.isEmpty(binding.identifierLabel) ||
+                binding.passwordInput.differentContent(
+                    binding.passwordRepeatInput,
+                    binding.passwordRepeatLabel
+                )
+        return !isNotValid
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding.registerBtn.setOnClickListener {
 
-            if ((binding.passwordInput.isNotEmpty(binding.passwordLabel) ||
-                binding.passwordRepeatInput.isNotEmpty(binding.passwordRepeatLabel) ||
-                binding.emailInput.isNotEmpty(binding.emailLabel) ||
-                binding.identifierInput.isNotEmpty(binding.identifierLabel)) &&
-                binding.passwordInput.sameContent(
-                    binding.passwordRepeatInput,
-                    binding.passwordLabel,
-                    binding.passwordRepeatLabel
-                ))
+
+
+            if (validateForm())
             {
                 val userName = binding.identifierInput.text.toString()
                 val email = binding.emailInput.text.toString()

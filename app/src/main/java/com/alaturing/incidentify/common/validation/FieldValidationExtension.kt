@@ -4,16 +4,15 @@ import android.widget.EditText
 import com.google.android.material.textfield.TextInputLayout
 
 
-fun EditText.isNotEmpty(label:TextInputLayout?=null):Boolean {
-    val isNotEmpty = this.text.isNotEmpty()
-    label?.error = if (isNotEmpty) null else "Field cannot be empty"
-    return isNotEmpty
+fun EditText.isEmpty(label:TextInputLayout?=null):Boolean {
+    val isEmpty = this.text.isEmpty()
+    label?.error = if (isEmpty)  "Field cannot be empty" else null
+    return isEmpty
 }
 
-fun EditText.sameContent(compare:EditText,label1:TextInputLayout?=null,label2: TextInputLayout?=null):Boolean {
-    val sameContent = this.text.toString() == compare.text.toString()
-    label1?.error = if (sameContent) null else "Does not match"
-    label2?.error = if (sameContent) null else "Does not match"
-    return sameContent
+fun EditText.differentContent(compare:EditText,compareLabel:TextInputLayout?=null):Boolean {
+    val contentIsDifferent = this.text.toString() != compare.text.toString()
+    compareLabel?.error = if (contentIsDifferent) "Does not match" else null
+    return contentIsDifferent
 
 }
