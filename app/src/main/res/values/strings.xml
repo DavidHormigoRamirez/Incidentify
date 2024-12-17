@@ -12,4 +12,5 @@
     <string name="login_auth_failed">Incorrect identifier or password</string>
     <string name="home">Home</string>
     <string name="incidents">Incidents</string>
+    <string name="solved">Solved</string>
 </resources>
