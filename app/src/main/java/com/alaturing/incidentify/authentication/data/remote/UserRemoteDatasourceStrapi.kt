@@ -1,20 +1,20 @@
-package com.alaturing.incidentify.remote
+package com.alaturing.incidentify.authentication.data.remote
 
 import com.alaturing.incidentify.authentication.model.User
 import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.exception.UserNotRegisteredException
-import com.alaturing.incidentify.main.incident.model.Incident
-import com.alaturing.incidentify.remote.model.AuthRequestBody
-import com.alaturing.incidentify.remote.model.RegisterRequestBody
-import com.alaturing.incidentify.remote.model.toModel
+import com.alaturing.incidentify.authentication.data.remote.model.AuthRequestBody
+import com.alaturing.incidentify.authentication.data.remote.model.RegisterRequestBody
+import com.alaturing.incidentify.authentication.data.remote.model.toModel
+import com.alaturing.incidentify.common.remote.StrapiApi
 import javax.inject.Inject
 
 /**
- * Implementación de [RemoteDatasource] para gestionar el consumo de una APi en Strapi
+ * Implementación de [UserRemoteDatasource] para gestionar el consumo de una APi en Strapi
  */
-class RemoteDatasourceStrapi @Inject constructor(
+class UserRemoteDatasourceStrapi @Inject constructor(
     private val api: StrapiApi
-) :RemoteDatasource  {
+) : UserRemoteDatasource {
 
     /**
      * @param identifier
@@ -51,13 +51,5 @@ class RemoteDatasourceStrapi @Inject constructor(
         }
     }
 
-    override suspend fun readAll(): Result<List<Incident>> {
-        val response = api.incidentReadAll()
-        return if (response.isSuccessful) {
-            Result.success(response.body()!!.data.toModel())
-        }
-        else {
-            TODO()
-        }
-    }
+
 }

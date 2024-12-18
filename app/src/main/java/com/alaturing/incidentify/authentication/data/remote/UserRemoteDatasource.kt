@@ -1,14 +1,11 @@
-package com.alaturing.incidentify.remote
+package com.alaturing.incidentify.authentication.data.remote
 
 import com.alaturing.incidentify.authentication.model.User
-import com.alaturing.incidentify.main.incident.model.Incident
 
-interface RemoteDatasource {
+interface UserRemoteDatasource {
 
     // Métodos autenticación
     suspend fun login(identifier:String,password:String):Result<User>
     suspend fun register(userName:String,email:String,password:String):Result<User>
 
-    // Métodos incidentes
-    suspend fun readAll():Result<List<Incident>>
 }

@@ -1,8 +1,8 @@
 package com.alaturing.incidentify.di
 
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
-import com.alaturing.incidentify.remote.AuthenticationInterceptor
-import com.alaturing.incidentify.remote.StrapiApi
+import com.alaturing.incidentify.authentication.data.remote.AuthenticationInterceptor
+import com.alaturing.incidentify.common.remote.StrapiApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -56,7 +56,7 @@ class NetworkModule {
     }
     @Provides
     @Singleton
-    fun provideRemoteApi(client:OkHttpClient):StrapiApi {
+    fun provideRemoteApi(client:OkHttpClient): StrapiApi {
         val retrofit = Retrofit.Builder()
             .baseUrl(STRAPI)
             .client(client)

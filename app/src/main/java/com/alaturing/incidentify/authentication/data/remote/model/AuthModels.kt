@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.remote.model
+package com.alaturing.incidentify.authentication.data.remote.model
 
 data class AuthRequestBody(
     val identifier:String,
