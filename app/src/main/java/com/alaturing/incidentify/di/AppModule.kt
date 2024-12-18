@@ -6,8 +6,10 @@ import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceMock
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositoryDefault
-import com.alaturing.incidentify.remote.RemoteDatasource
-import com.alaturing.incidentify.remote.RemoteDatasourceStrapi
+import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource
+import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasourceStrapi
+import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
+import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasourceStrapi
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -36,12 +38,16 @@ abstract class AppModule {
     abstract fun bindIncidentRepository(r:IncidentRepositoryDefault):IncidentRepository
 
     /**
-     * Provee la fuente de datos remota
+     * Provee la fuente de datos remota para usuarios
      */
     @Binds
     @Singleton
     //abstract fun bindMockRemoteDatasource(ds:RemoteDatasourceMock):RemoteDatasource
-    abstract fun bindStrapiRemoteDatasource(ds: RemoteDatasourceStrapi):RemoteDatasource
+    abstract fun bindUserRemoteDatasource(ds: UserRemoteDatasourceStrapi): UserRemoteDatasource
+
+    @Binds
+    @Singleton
+    abstract fun bindIncidentRemoteDatasource(ds:IncidentRemoteDatasourceStrapi): IncidentRemoteDatasource
 
     /**
      * Provee la fuente de datos local para usuarios

@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.remote.model
+package com.alaturing.incidentify.main.incident.data.remote.model
 
 data class IncidentsResponseBody(
     val data: List<IncidentResponse>
@@ -10,7 +10,7 @@ data class IncidentResponse(
     val description:String,
     val solved:Boolean?,
     val solved_at:String?,
-    val evidence:Media?,
+    val evidence: Media?,
 )
 
 data class Media(

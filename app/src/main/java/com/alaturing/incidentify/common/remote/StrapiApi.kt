@@ -1,9 +1,9 @@
-package com.alaturing.incidentify.remote
+package com.alaturing.incidentify.common.remote
 
-import com.alaturing.incidentify.remote.model.AuthRequestBody
-import com.alaturing.incidentify.remote.model.AuthResponseBody
-import com.alaturing.incidentify.remote.model.IncidentsResponseBody
-import com.alaturing.incidentify.remote.model.RegisterRequestBody
+import com.alaturing.incidentify.authentication.data.remote.model.AuthRequestBody
+import com.alaturing.incidentify.authentication.data.remote.model.AuthResponseBody
+import com.alaturing.incidentify.main.incident.data.remote.model.IncidentsResponseBody
+import com.alaturing.incidentify.authentication.data.remote.model.RegisterRequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,7 +14,7 @@ import retrofit2.http.Query
  * API del remoto para Retrofit
  */
 interface StrapiApi: StrapiAuthenticationApi,
-                     StrapiIncidentApi
+    StrapiIncidentApi
 
 /**
  * Autenticación

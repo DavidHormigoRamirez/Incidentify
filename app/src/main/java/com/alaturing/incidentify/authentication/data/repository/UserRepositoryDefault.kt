@@ -2,7 +2,7 @@ package com.alaturing.incidentify.authentication.data.repository
 
 import com.alaturing.incidentify.authentication.model.User
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
-import com.alaturing.incidentify.remote.RemoteDatasource
+import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource
 import javax.inject.Inject
 
 /**
@@ -11,7 +11,7 @@ import javax.inject.Inject
  * de token, registro o login se hace en los datasources
  */
 class UserRepositoryDefault @Inject constructor(
-    private val remote:RemoteDatasource,
+    private val remote: UserRemoteDatasource,
     private val local: UserLocalDatasource
 ): UserRepository {
     /**

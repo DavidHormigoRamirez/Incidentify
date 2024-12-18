@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.remote
+package com.alaturing.incidentify.authentication.data.remote
 
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import kotlinx.coroutines.runBlocking
