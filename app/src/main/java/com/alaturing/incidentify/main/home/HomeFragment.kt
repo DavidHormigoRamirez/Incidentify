@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.home
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.alaturing.incidentify.R
+import com.alaturing.incidentify.authentication.ui.AuthenticationActivity
 import com.alaturing.incidentify.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -35,6 +37,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.topAppBar.setOnMenuItemClickListener {
+            mi -> when(mi.itemId) {
+                R.id.logout -> {
+                    viewModel.onLogout()
+                    true
+                }
+                else -> false
+            }
+
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect {
@@ -45,6 +57,11 @@ class HomeFragment : Fragment() {
                                 binding.reportedCount.text = resources.getQuantityString(R.plurals.reported,uiState.reportedIncidents,uiState.reportedIncidents)
                                 binding.unresolvedCount.text = resources.getQuantityString(R.plurals.unresolved,uiState.unresolvedIncidents,uiState.unresolvedIncidents)
 
+                            }
+                            HomeUiState.LoggedOut -> {
+                                val intent = Intent(requireContext(),AuthenticationActivity::class.java)
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP )
+                                startActivity(intent)
                             }
                         }
                 }
