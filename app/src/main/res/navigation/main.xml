@@ -3,6 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main.xml"
     app:startDestination="@id/home">
+    <action
+        android:id="@+id/action_homeFragment_to_incidentsFragment"
+        app:destination="@id/incidentsFragment" />
     <include app:graph="@navigation/incident" />
     <include app:graph="@navigation/home" />
 </navigation>
