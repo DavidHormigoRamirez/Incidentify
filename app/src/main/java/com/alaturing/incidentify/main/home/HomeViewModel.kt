@@ -20,7 +20,7 @@ class HomeViewModel @Inject constructor(
     private val repository: IncidentRepository
 ): ViewModel() {
 
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Success(0,0))
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState>
         get() = _uiState.asStateFlow()
 

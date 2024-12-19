@@ -2,6 +2,7 @@ package com.alaturing.incidentify.main.home
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navGraphViewModels
 import com.alaturing.incidentify.R
 import com.alaturing.incidentify.authentication.ui.AuthenticationActivity
 import com.alaturing.incidentify.databinding.FragmentHomeBinding
@@ -28,9 +30,13 @@ import kotlinx.coroutines.launch
 class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
+    //private val viewModel: HomeViewModel by navGraphViewModels(R.id.main_xml)
     private val navViewModel: NavigationSharedViewModel by activityViewModels()
 
+    init {
+        Log.d("HomeViewModel", "ViewModel instance created")
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,7 +59,9 @@ class HomeFragment : Fragment() {
 
         }
         binding.toUnresolvedIncidents.setOnClickListener {
-            navViewModel.onNavigateToIncident()
+
+            val action = HomeFragmentDirections.actionHomeToIncident()
+            findNavController().navigate(action)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
@@ -61,6 +69,7 @@ class HomeFragment : Fragment() {
                 viewModel.uiState.collect {
                     uiState ->
                         when(uiState) {
+                            is HomeUiState.Loading -> {}
                             is HomeUiState.Error -> {}
                             is HomeUiState.Success -> {
                                 binding.reportedCount.text = resources.getQuantityString(R.plurals.reported,uiState.reportedIncidents,uiState.reportedIncidents)
