@@ -2,6 +2,9 @@ package com.alaturing.incidentify.authentication.data.remote
 
 import com.alaturing.incidentify.authentication.model.User
 
+/**
+ *
+ */
 interface UserRemoteDatasource {
 
     // Métodos autenticación

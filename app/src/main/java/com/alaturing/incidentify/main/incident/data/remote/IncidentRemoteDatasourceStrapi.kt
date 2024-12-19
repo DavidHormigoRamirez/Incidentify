@@ -2,7 +2,7 @@ package com.alaturing.incidentify.main.incident.data.remote
 
 import com.alaturing.incidentify.common.remote.StrapiApi
 import com.alaturing.incidentify.main.incident.model.Incident
-import com.alaturing.incidentify.authentication.data.remote.model.toModel
+import com.alaturing.incidentify.main.incident.data.remote.model.toModel
 import javax.inject.Inject
 
 /**
