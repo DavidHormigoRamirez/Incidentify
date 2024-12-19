@@ -47,13 +47,11 @@ class MainActivity : AppCompatActivity() {
                 navViewModel.navigationEvents.collect { event ->
                 when (event) {
                     is NavigationEvent.ToIncidents -> {
-                        navController.navigate(R.id.incident)
-                        navController.navigate(R.id.action_homeFragment_to_incidentsFragment, null,
-                            NavOptions.Builder().setPopUpTo(R.id.homeFragment, true).build())
+                        navController.navigate(R.id.incident,null,
+                            NavOptions.Builder().setPopUpTo(R.id.homeFragment, false).build())
+
                     }
                     is NavigationEvent.ToHome -> {
-                        // Perform the navigation to the HomeFragment
-                        //navController.navigate(R.id.action_incidentsFragment_to_homeFragment)
                     }
                 }
             }
