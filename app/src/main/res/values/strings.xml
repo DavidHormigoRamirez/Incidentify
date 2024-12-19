@@ -13,4 +13,14 @@
     <string name="home">Home</string>
     <string name="incidents">Incidents</string>
     <string name="solved">Solved</string>
+    <plurals name="reported">
+        <item quantity="zero">No reported incidents</item>
+        <item quantity="one">%d reported incident</item>
+        <item quantity="other">%d reported incidents</item>
+    </plurals>
+    <plurals name="unresolved">
+        <item quantity="zero">All incidents resolved :)</item>
+        <item quantity="one">%d unresolved incident</item>
+        <item quantity="other">%d unresolved incidents</item>
+    </plurals>
 </resources>
