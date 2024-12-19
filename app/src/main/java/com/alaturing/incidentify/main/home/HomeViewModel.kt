@@ -2,6 +2,7 @@ package com.alaturing.incidentify.main.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,6 +16,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val loginRepository: UserRepository,
     private val repository: IncidentRepository
 ): ViewModel() {
 
@@ -45,6 +47,12 @@ class HomeViewModel @Inject constructor(
             }
         }
 
+    }
+    fun onLogout() {
+        viewModelScope.launch {
+            loginRepository.logout()
+            _uiState.value = HomeUiState.LoggedOut
+        }
     }
 
 }

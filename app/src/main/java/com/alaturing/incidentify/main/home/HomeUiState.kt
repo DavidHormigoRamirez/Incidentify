@@ -5,6 +5,7 @@ package com.alaturing.incidentify.main.home
  */
 sealed class HomeUiState {
 
+    data object LoggedOut: HomeUiState()
     data class Success(val unresolvedIncidents:Int, val reportedIncidents:Int):HomeUiState()
     data class Error(val message:String):HomeUiState()
 
