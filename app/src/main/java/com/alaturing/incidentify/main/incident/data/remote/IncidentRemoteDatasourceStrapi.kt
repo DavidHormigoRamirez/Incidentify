@@ -1,8 +1,10 @@
 package com.alaturing.incidentify.main.incident.data.remote
 
+import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.remote.StrapiApi
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.model.toModel
+import retrofit2.http.HTTP
 import javax.inject.Inject
 
 /**
@@ -22,7 +24,14 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
             Result.success(response.body()!!.data.toModel())
         }
         else {
-            TODO("Implementar manejo de errores")
+            return when (response.code()) {
+                403 -> {
+                    // No autorizado
+                    Result.failure(UserNotAuthorizedException())
+                }
+
+                else -> Result.failure(RuntimeException())
+            }
         }
     }
 }

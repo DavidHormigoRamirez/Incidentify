@@ -14,12 +14,19 @@ class AuthenticationInterceptor @Inject constructor(
 ):Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
+        val path = chain.request().url.encodedPath
+        if (chain.request().method == "POST" && chain.request().url.encodedPath == "/api/auth/local") {
+            return chain.proceed(chain.request())
+        }
         // Leemos el token desde el repositorio local de usuarios
         val token: String? =
                 runBlocking {
-                       return@runBlocking userLocalDatasource.retrieveUser()?.token
-                   }
-        // Si tenemos un token valido, lo añadiremos como una cabecera de autenticación
+                    userLocalDatasource.retrieveUser()?.let {
+                    return@runBlocking it.token
+                }
+                    return@runBlocking null
+                }
+        // Si tenemos un token almacenado, lo añadiremos como una cabecera de autenticación
         token?.let {
             val newRequest = chain.request().newBuilder()
                 .addHeader("Authorization","Bearer $it")

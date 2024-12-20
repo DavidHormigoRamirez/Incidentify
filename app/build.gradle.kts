@@ -44,6 +44,9 @@ android {
 
 dependencies {
 
+    // DataStore
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
     // Coil
     implementation(libs.coil)
     implementation(libs.coil.network.okhttp)
