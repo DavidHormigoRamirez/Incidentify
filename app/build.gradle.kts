@@ -45,7 +45,7 @@ android {
 dependencies {
 
     // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation(libs.androidx.datastore.preferences)
 
     // Coil
     implementation(libs.coil)

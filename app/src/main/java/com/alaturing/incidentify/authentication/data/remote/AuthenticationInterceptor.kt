@@ -14,7 +14,6 @@ class AuthenticationInterceptor @Inject constructor(
 ):Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
 
-        val path = chain.request().url.encodedPath
         if (chain.request().method == "POST" && chain.request().url.encodedPath == "/api/auth/local") {
             return chain.proceed(chain.request())
         }
