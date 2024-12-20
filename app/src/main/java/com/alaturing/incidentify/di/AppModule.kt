@@ -4,7 +4,6 @@ import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceDS
-import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceMock
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositoryDefault
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource

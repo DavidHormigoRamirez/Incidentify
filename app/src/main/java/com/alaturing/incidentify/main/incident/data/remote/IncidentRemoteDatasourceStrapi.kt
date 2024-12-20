@@ -4,11 +4,10 @@ import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.remote.StrapiApi
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.model.toModel
-import retrofit2.http.HTTP
 import javax.inject.Inject
 
 /**
- * Implementación de [RemoteDatasource] para gestionar el consumo de una APi en Strapi
+ * Implementación de [IncidentRemoteDatasource] para gestionar el consumo de una APi en Strapi
  */
 class IncidentRemoteDatasourceStrapi @Inject constructor(
     private val api: StrapiApi
