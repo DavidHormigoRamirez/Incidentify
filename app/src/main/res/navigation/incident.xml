@@ -9,5 +9,19 @@
         android:id="@+id/incidentsFragment"
         android:name="com.alaturing.incidentify.main.incident.ui.IncidentsFragment"
         android:label="fragment_incidents"
-        tools:layout="@layout/fragment_incidents" />
+        tools:layout="@layout/fragment_incidents" >
+        <action
+            android:id="@+id/action_incidentsFragment_to_incidentEditFragment"
+            app:destination="@id/incidentEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/incidentEditFragment"
+        android:name="com.alaturing.incidentify.main.incident.ui.IncidentEditFragment"
+        android:label="fragment_incident_edit"
+        tools:layout="@layout/fragment_incident_edit" >
+        <argument
+            android:name="hideNavbar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>

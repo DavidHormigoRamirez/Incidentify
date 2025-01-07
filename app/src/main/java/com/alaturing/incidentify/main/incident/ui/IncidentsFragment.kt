@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.alaturing.incidentify.R
 import com.alaturing.incidentify.databinding.FragmentIncidentsBinding
@@ -62,6 +63,10 @@ class IncidentsFragment : Fragment() {
                     }
                 }
             }
+        }
+        // Manejador para el boton de crear incidente, ejecutamos la navegación
+        binding.createIncidentFab.setOnClickListener {
+            findNavController().navigate(IncidentsFragmentDirections.actionIncidentsFragmentToIncidentEditFragment())
         }
 
     }

@@ -60,8 +60,8 @@ class HomeFragment : Fragment() {
         }
         binding.toUnresolvedIncidents.setOnClickListener {
 
-            val action = HomeFragmentDirections.actionHomeToIncident()
-            findNavController().navigate(action)
+            //val action = HomeFragmentDirections.actionHomeToIncident()
+            //findNavController().navigate(action)
         }
 
         viewLifecycleOwner.lifecycleScope.launch {

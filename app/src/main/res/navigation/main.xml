@@ -3,16 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main.xml"
     app:startDestination="@id/home">
-    <fragment
-        android:id="@+id/home"
-        android:name="com.alaturing.incidentify.main.home.HomeFragment"
-        android:label="HomeFragment" >
-        <action
-            android:id="@+id/action_home_to_incident"
-            app:destination="@id/incident" />
-    </fragment>
-    <fragment
-        android:id="@+id/incident"
-        android:name="com.alaturing.incidentify.main.incident.ui.IncidentsFragment"
-        android:label="IncidentsFragment" />
+    <include app:graph="@navigation/home" />
+    <include app:graph="@navigation/incident" />
 </navigation>
