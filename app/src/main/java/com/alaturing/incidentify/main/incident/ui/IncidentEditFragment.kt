@@ -10,10 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.collection.emptyLongSet
 import androidx.core.content.ContextCompat
 
-import com.alaturing.incidentify.R
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
 
 private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
