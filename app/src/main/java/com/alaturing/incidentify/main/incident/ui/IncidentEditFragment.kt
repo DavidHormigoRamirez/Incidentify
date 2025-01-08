@@ -13,10 +13,12 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
+import dagger.hilt.android.AndroidEntryPoint
 
 private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
                                             Manifest.permission.RECORD_AUDIO,)
 
+@AndroidEntryPoint
 class IncidentEditFragment : Fragment() {
 
     private lateinit var binding: FragmentIncidentEditBinding
