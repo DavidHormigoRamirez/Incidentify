@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,7 +56,8 @@ class IncidentEditFragment : Fragment() {
     }
 
     private fun navigateToCamera() {
-        // TODO
+        val action = IncidentEditFragmentDirections.actionIncidentEditFragmentToCameraPreviewFragment()
+        findNavController().navigate(action)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
