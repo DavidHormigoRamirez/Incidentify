@@ -3,6 +3,7 @@ package com.alaturing.incidentify.main.incident.ui
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,10 +12,16 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import coil3.load
 
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
                                             Manifest.permission.RECORD_AUDIO,)
@@ -22,10 +29,12 @@ private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
 @AndroidEntryPoint
 class IncidentEditFragment : Fragment() {
 
+    private val viewModel:EditIncidentViewModel by activityViewModels()
     private lateinit var binding: FragmentIncidentEditBinding
 
-    // PEDIMOS PERMISOS
+    // Contrato de permisos múltiples
     private val contract = ActivityResultContracts.RequestMultiplePermissions()
+    // Registramos el fragmento para gestionar la elección de permisos del usuario
     private val launcher = registerForActivityResult(contract) {
             permissions ->
         var hasPermissions = true
@@ -55,6 +64,9 @@ class IncidentEditFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Función que navega al fragmento de Preview de camara
+     */
     private fun navigateToCamera() {
         val action = IncidentEditFragmentDirections.actionIncidentEditFragmentToCameraPreviewFragment()
         findNavController().navigate(action)
@@ -75,8 +87,31 @@ class IncidentEditFragment : Fragment() {
                 launcher.launch(PERMISSIONS_REQUIRED)
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.photo.collect {
+                    photoUri ->
+                        when(photoUri) {
+                            Uri.EMPTY -> {
+                                //No hay foto, podemos poner un placeholder en la imagen
+                            }
+                            else -> {
+                                // tenemos foto, la ponemos en la UI aprovechando
+                                // que tenemos Coil
+                                binding.incidentImage.load(photoUri)
+                            }
+                        }
+                }
+            }
+        }
     }
 
+    /**
+     * Función para comprobar si se tienen todos los permisos requeridos
+     * para usar la camara
+     * @param context Contexto de la aplicación
+     * @return Si tiene permisos para usar la camara
+     */
     private fun hasCameraPermissions(context: Context):Boolean {
         // Tenemos permiso si todos los permisos han sido concecidos
         return PERMISSIONS_REQUIRED.all { p ->

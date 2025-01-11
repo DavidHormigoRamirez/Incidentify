@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -45,17 +46,27 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 navViewModel.navigationEvents.collect { event ->
-                when (event) {
-                    is NavigationEvent.ToIncidents -> {
-                        navController.navigate(R.id.incident,null,
-                            NavOptions.Builder().setPopUpTo(R.id.homeFragment, false).build())
+                    when (event) {
+                        is NavigationEvent.ToIncidents -> {
+                            navController.navigate(R.id.incident,null,
+                                NavOptions.Builder().setPopUpTo(R.id.homeFragment, false).build())
 
-                    }
-                    is NavigationEvent.ToHome -> {
+                        }
+                        is NavigationEvent.ToHome -> {
+                        }
                     }
                 }
             }
         }
+
+        // Capturamos las navegaciones
+        navController.addOnDestinationChangedListener {
+            _,destination,_ ->
+                val hideNavbar = destination.arguments["hideNavbar"]
+            hideNavbar?.let {
+                binding.mainBottomNav.isVisible = false
+            }
+
         }
     }
 }

@@ -31,5 +31,10 @@
         android:id="@+id/cameraPreviewFragment"
         android:name="com.alaturing.incidentify.main.incident.ui.CameraPreviewFragment"
         android:label="fragment_camera_preview"
-        tools:layout="@layout/fragment_camera_preview" />
+        tools:layout="@layout/fragment_camera_preview" >
+        <argument
+            android:name="hideNavbar"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </fragment>
 </navigation>
