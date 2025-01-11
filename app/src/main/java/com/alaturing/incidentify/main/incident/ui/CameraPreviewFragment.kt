@@ -1,9 +1,7 @@
 package com.alaturing.incidentify.main.incident.ui
 
 import android.content.ContentValues
-import android.media.Image
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,16 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.*
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
-import com.alaturing.incidentify.R
 import com.alaturing.incidentify.databinding.FragmentCameraPreviewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
