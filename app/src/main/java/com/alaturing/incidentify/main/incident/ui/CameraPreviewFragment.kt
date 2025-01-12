@@ -29,7 +29,7 @@ import java.util.concurrent.Executors
 @AndroidEntryPoint
 class CameraPreviewFragment : Fragment() {
     private lateinit var binding: FragmentCameraPreviewBinding
-    private val viewModel:EditIncidentViewModel by activityViewModels()
+    private val viewModel:IncidentEditViewModel by activityViewModels()
     // Instanciamos un nuevo controlador de camara
     private lateinit var cameraController: LifecycleCameraController
     override fun onCreateView(

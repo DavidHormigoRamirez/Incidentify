@@ -29,7 +29,7 @@ private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
 @AndroidEntryPoint
 class IncidentEditFragment : Fragment() {
 
-    private val viewModel:EditIncidentViewModel by activityViewModels()
+    private val viewModel:IncidentEditViewModel by activityViewModels()
     private lateinit var binding: FragmentIncidentEditBinding
 
     // Contrato de permisos múltiples

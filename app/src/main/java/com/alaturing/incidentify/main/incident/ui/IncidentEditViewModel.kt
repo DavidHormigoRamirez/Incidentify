@@ -15,7 +15,7 @@ import javax.inject.Inject
  * incidentes
  */
 @HiltViewModel
-class EditIncidentViewModel @Inject constructor(): ViewModel()  {
+class IncidentEditViewModel @Inject constructor(): ViewModel()  {
 
     private val _photo = MutableStateFlow<Uri>(Uri.EMPTY)
     val photo: StateFlow<Uri>
