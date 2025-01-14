@@ -14,6 +14,9 @@
     <string name="incidents">Incidents</string>
     <string name="solved">Solved</string>
     <string name="report_incident">Report</string>
+    <string name="select_photo">Select photo</string>
+    <string name="incident_captured_image">Incident captured image</string>
+    <string name="take_picture">Take picture</string>
     <plurals name="reported">
         <item quantity="zero">No reported incidents</item>
         <item quantity="one">%d reported incident</item>

@@ -5,11 +5,13 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -44,13 +46,24 @@ class IncidentEditFragment : Fragment() {
             }
         }
         if (!hasPermissions) {
-            // TODO, Mensaje de error no tiene permisos
             Toast.makeText(requireContext(),"No tienes permisos",Toast.LENGTH_LONG).show()
         }
         else {
             navigateToCamera()
         }
     }
+
+    // Registramos el fragmento como receptor de un seleccionador de media
+    val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Si la uril no es nula, es que el usuario ha selccionado algín archivo
+        if (uri != null) {
+            // Lo carcagmos en el ImageView
+            binding.incidentImage.load(uri)
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,19 +77,15 @@ class IncidentEditFragment : Fragment() {
         return binding.root
     }
 
-    /**
-     * Función que navega al fragmento de Preview de camara
-     */
-    private fun navigateToCamera() {
-        val action = IncidentEditFragmentDirections.actionIncidentEditFragmentToCameraPreviewFragment()
-        findNavController().navigate(action)
-    }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Manejador del boton de tomar foto
         // Esto debe navegar a la vista de camara, por lo que antes de realizarlo vamos a comprobar
         // que tiene permisos para la camara
         binding.showCameraBtn.setOnClickListener {
+            //onShowMediaSelector()
 
             // SI TENEMOS PERMISOS NAVEGAMOS A LA CAMARA
             if (hasCameraPermissions(requireContext())) {
@@ -86,6 +95,11 @@ class IncidentEditFragment : Fragment() {
                 // SI NO TENEMOS PERMISOS, LOS PEDIMOS
                 launcher.launch(PERMISSIONS_REQUIRED)
             }
+        }
+
+        // MAnejador para el boton de selecionar
+        binding.selectPhotoBtn.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -119,5 +133,15 @@ class IncidentEditFragment : Fragment() {
         }
 
     }
+
+    /**
+     * Función que navega al fragmento de Preview de camara
+     */
+    private fun navigateToCamera() {
+        val action = IncidentEditFragmentDirections.actionIncidentEditFragmentToCameraPreviewFragment()
+        findNavController().navigate(action)
+    }
+
+
 
 }

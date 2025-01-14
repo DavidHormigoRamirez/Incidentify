@@ -8,3 +8,4 @@ Este repositorio contiene varias ramas que implementan conceptos vistos en clase
 - [datastore](https://github.com/DavidHormigoRamirez/Incidentify/tree/datastore). A partir de remote, añade un DataStore para almacenar la información del usuario logueado
 - [permisions](https://github.com/DavidHormigoRamirez/Incidentify/tree/permissions). Rama con solicitud de permisos de tiempo de ejecución
 - [camera](https://github.com/DavidHormigoRamirez/Incidentify/tree/camera). Rama con uso básico de la camara
+- [selector](https://github.com/DavidHormigoRamirez/Incidentify/tree/selector). Rama con un selector de medios para los incidentes
