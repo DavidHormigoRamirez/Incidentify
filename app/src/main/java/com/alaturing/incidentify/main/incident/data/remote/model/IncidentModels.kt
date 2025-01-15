@@ -3,7 +3,9 @@ package com.alaturing.incidentify.main.incident.data.remote.model
 data class IncidentsResponseBody(
     val data: List<IncidentResponse>
 )
-
+data class IncidentResponseBody(
+    val data: IncidentResponse
+)
 data class IncidentResponse(
     val id:Int,
     val documentId:String,
@@ -25,4 +27,20 @@ data class MediaFormats(
 
 data class ImageAttributes(
     val url: String
+)
+
+// Modelos para crear
+data class CreateIncidentPayloadDataWrapper(
+    val data: CreateIncidentPayload
+)
+// Cuerpo
+data class CreateIncidentPayload(
+    val description: String,
+    val solved: Boolean
+)
+
+data class CreatedMediaItemResponse(
+    val id:Int,
+    val documentId: String,
+    val name:String
 )

@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.main.incident.ui
+package com.alaturing.incidentify.main.incident.ui.list
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class IncidentsFragment : Fragment() {
 
     private lateinit var binding:FragmentIncidentsBinding
-    private val viewModel:IncidentsViewModel by viewModels()
+    private val viewModel: IncidentsViewModel by viewModels()
 
 
     override fun onCreateView(

@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.main.incident.ui
+package com.alaturing.incidentify.main.incident.ui.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +12,9 @@ import com.alaturing.incidentify.main.incident.model.Incident
 /**
  * Adaptarador que implementa [ListAdapter] para incidencias
  */
-class IncidentsAdapter: ListAdapter<Incident, IncidentsAdapter.IncidentViewHolder>(IncidentDiffCallback) {
+class IncidentsAdapter: ListAdapter<Incident, IncidentsAdapter.IncidentViewHolder>(
+    IncidentDiffCallback
+) {
 
     inner class IncidentViewHolder(
         private val binding:IncidentItemBinding

@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener {
             _,destination,_ ->
                 val hideNavbar = destination.arguments["hideNavbar"]
+            binding.mainBottomNav.isVisible = true
             hideNavbar?.let {
                 binding.mainBottomNav.isVisible = false
             }

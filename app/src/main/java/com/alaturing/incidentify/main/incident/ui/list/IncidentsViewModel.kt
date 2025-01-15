@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.main.incident.ui
+package com.alaturing.incidentify.main.incident.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

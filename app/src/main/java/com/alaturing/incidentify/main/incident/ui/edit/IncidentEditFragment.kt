@@ -1,4 +1,4 @@
-package com.alaturing.incidentify.main.incident.ui
+package com.alaturing.incidentify.main.incident.ui.edit
 
 import android.Manifest
 import android.content.Context
@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,24 +13,26 @@ import android.widget.Toast
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil3.load
-
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-private var PERMISSIONS_REQUIRED = arrayOf(Manifest.permission.CAMERA,
-                                            Manifest.permission.RECORD_AUDIO,)
+private var PERMISSIONS_REQUIRED = arrayOf(
+    Manifest.permission.CAMERA,
+    Manifest.permission.RECORD_AUDIO,)
 
 @AndroidEntryPoint
 class IncidentEditFragment : Fragment() {
 
-    private val viewModel:IncidentEditViewModel by activityViewModels()
+    private var _photoUri:Uri? = null
+    private val viewModel: IncidentEditViewModel by activityViewModels()
     private lateinit var binding: FragmentIncidentEditBinding
 
     // Contrato de permisos múltiples
@@ -46,7 +47,7 @@ class IncidentEditFragment : Fragment() {
             }
         }
         if (!hasPermissions) {
-            Toast.makeText(requireContext(),"No tienes permisos",Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "No tienes permisos", Toast.LENGTH_LONG).show()
         }
         else {
             navigateToCamera()
@@ -58,7 +59,8 @@ class IncidentEditFragment : Fragment() {
         // Si la uril no es nula, es que el usuario ha selccionado algín archivo
         if (uri != null) {
             // Lo carcagmos en el ImageView
-            binding.incidentImage.load(uri)
+            //binding.incidentImage.load(uri)
+            loadPhoto(uri)
         } else {
             Log.d("PhotoPicker", "No media selected")
         }
@@ -81,6 +83,29 @@ class IncidentEditFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Control estado de la pantalla
+        viewLifecycleOwner.lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect {
+                    uiState ->
+                    when(uiState) {
+                        is IncidentEditUiState.Created -> {
+                            // Se ha creado el incidente
+                            findNavController().popBackStack()
+                        }
+                        is IncidentEditUiState.Error -> {
+
+                        }
+                        IncidentEditUiState.New -> {
+
+                        }
+                    }
+                }
+            }
+        }
+
+
         // Manejador del boton de tomar foto
         // Esto debe navegar a la vista de camara, por lo que antes de realizarlo vamos a comprobar
         // que tiene permisos para la camara
@@ -101,6 +126,15 @@ class IncidentEditFragment : Fragment() {
         binding.selectPhotoBtn.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
+
+        // Manejador evento de creación
+        binding.saveIncidentBtn.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                val photoUri = _photoUri
+                viewModel.onSaveNewIncident(binding.incidentDescriptionInput.text.toString(),
+                    photoUri)
+            }
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.photo.collect {
@@ -112,12 +146,17 @@ class IncidentEditFragment : Fragment() {
                             else -> {
                                 // tenemos foto, la ponemos en la UI aprovechando
                                 // que tenemos Coil
-                                binding.incidentImage.load(photoUri)
+                                loadPhoto(photoUri)
                             }
                         }
                 }
             }
         }
+    }
+
+    private fun loadPhoto(uri:Uri?) {
+        binding.incidentImage.load(uri)
+        _photoUri = uri
     }
 
     /**
@@ -129,7 +168,7 @@ class IncidentEditFragment : Fragment() {
     private fun hasCameraPermissions(context: Context):Boolean {
         // Tenemos permiso si todos los permisos han sido concecidos
         return PERMISSIONS_REQUIRED.all { p ->
-            ContextCompat.checkSelfPermission(context,p) == PackageManager.PERMISSION_GRANTED
+            ContextCompat.checkSelfPermission(context, p) == PackageManager.PERMISSION_GRANTED
         }
 
     }

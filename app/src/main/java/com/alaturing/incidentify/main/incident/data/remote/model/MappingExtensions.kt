@@ -14,3 +14,10 @@ fun IncidentResponse.toModel(): Incident {
     )
 }
 fun List<IncidentResponse>.toModel():List<Incident> = map(IncidentResponse::toModel)
+
+fun Incident.toRemoteModel():CreateIncidentPayloadDataWrapper {
+    return CreateIncidentPayloadDataWrapper(CreateIncidentPayload(
+        description = this.description,
+        solved = this.solved
+    ))
+}

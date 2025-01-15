@@ -1,18 +1,18 @@
-package com.alaturing.incidentify.main.incident.ui
+package com.alaturing.incidentify.main.incident.ui.edit
 
 import android.content.ContentValues
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageCapture.*
+import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.view.CameraController
 import androidx.camera.view.LifecycleCameraController
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -29,7 +29,7 @@ import java.util.concurrent.Executors
 @AndroidEntryPoint
 class CameraPreviewFragment : Fragment() {
     private lateinit var binding: FragmentCameraPreviewBinding
-    private val viewModel:IncidentEditViewModel by activityViewModels()
+    private val viewModel: IncidentEditViewModel by activityViewModels()
     // Instanciamos un nuevo controlador de camara
     private lateinit var cameraController: LifecycleCameraController
     override fun onCreateView(
@@ -79,7 +79,7 @@ class CameraPreviewFragment : Fragment() {
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
         }
         // Construimos las opciones de salida para tomar la foto
-        val outputOptions = OutputFileOptions.Builder(
+        val outputOptions = ImageCapture.OutputFileOptions.Builder(
             requireContext().contentResolver,
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             contentValues
@@ -89,8 +89,8 @@ class CameraPreviewFragment : Fragment() {
         cameraController.takePicture(
             outputOptions,
             cameraExecutor,
-            object: OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: OutputFileResults) {
+            object: ImageCapture.OnImageSavedCallback {
+                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     // Cuando la foto se tome, vamos a ponerla en un viewmodel
                     // con scope en la actividad para poder tomarla desde el
                     // fragmento de editar incidente
@@ -105,7 +105,7 @@ class CameraPreviewFragment : Fragment() {
                 // En caso de error enviamos en un toast el texto del error ocurrido
                 override fun onError(exception: ImageCaptureException) {
                     exception.message?.let {
-                        Toast.makeText(requireContext(),exception.message,Toast.LENGTH_LONG).show()
+                        Toast.makeText(requireContext(), exception.message, Toast.LENGTH_LONG).show()
                     }
 
                 }
