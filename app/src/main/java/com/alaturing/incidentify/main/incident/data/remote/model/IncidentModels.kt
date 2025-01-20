@@ -8,8 +8,11 @@ data class IncidentResponseBody(
 )
 data class IncidentResponse(
     val id:Int,
-    val documentId:String,
-    val description:String,
+    //val documentId:String,
+    val attributes: IncidentAttributes
+)
+data class IncidentAttributes(
+    val description: String,
     val solved:Boolean?,
     val solved_at:String?,
     val evidence: Media?,

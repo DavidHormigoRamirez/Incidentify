@@ -48,7 +48,7 @@ class IncidentsAdapter: ListAdapter<Incident, IncidentsAdapter.IncidentViewHolde
 
     object IncidentDiffCallback: DiffUtil.ItemCallback<Incident>() {
         override fun areItemsTheSame(oldItem: Incident, newItem: Incident): Boolean {
-            return oldItem.documentId == newItem.documentId
+            return oldItem.id == newItem.id
         }
 
         override fun areContentsTheSame(oldItem: Incident, newItem: Incident): Boolean {
