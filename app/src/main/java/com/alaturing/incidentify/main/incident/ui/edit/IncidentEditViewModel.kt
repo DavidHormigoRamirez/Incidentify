@@ -45,7 +45,8 @@ class IncidentEditViewModel @Inject constructor(
         viewModelScope.launch {
             val result = repository.createOne(description,evidence)
             if (result.isSuccess) {
-                _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!)
+                // TODO CAmbiar para emitir todo el incidnete
+                _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!.id)
             }
         }
 

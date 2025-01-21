@@ -8,6 +8,8 @@ import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositor
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositoryDefault
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasourceStrapi
+import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDataSourceRoom
+import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasourceStrapi
 import dagger.Binds
@@ -49,6 +51,9 @@ abstract class AppModule {
     @Singleton
     abstract fun bindIncidentRemoteDatasource(ds:IncidentRemoteDatasourceStrapi): IncidentRemoteDatasource
 
+    @Binds
+    @Singleton
+    abstract fun bindIncidentLocalDatasource(ds:IncidentLocalDataSourceRoom):IncidentLocalDatasource
     /**
      * Provee la fuente de datos local para usuarios
      */

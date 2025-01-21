@@ -8,6 +8,7 @@ import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.remote.StrapiApi
 import com.alaturing.incidentify.main.incident.data.remote.model.CreateIncidentPayload
 import com.alaturing.incidentify.main.incident.data.remote.model.CreateIncidentPayloadDataWrapper
+import com.alaturing.incidentify.main.incident.data.remote.model.toExternal
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.model.toModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -16,6 +17,7 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
+
 
 import javax.inject.Inject
 
@@ -48,10 +50,12 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
         }
     }
 
+
+
     /**
      * @return Id del incidente creado
      */
-    override suspend fun createOne(description: String, evidence: Uri?): Result<Int> {
+    override suspend fun createOne(description: String, evidence: Uri?): Result<Incident> {
         // Convertimos a remoto
         val newIncident = CreateIncidentPayloadDataWrapper(
             CreateIncidentPayload(
@@ -79,14 +83,16 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
                     // Convertimos el fichero a cuerpo de la petición
                     val requestBody = inputStream.readBytes().toRequestBody(mimeType.toMediaTypeOrNull())
 
+
                     // Construimos la parte de la petición
                     val part = MultipartBody.Part.createFormData("files", fileName, requestBody)
                     // Map con el resto de parámetros
                     val partMap: MutableMap<String, RequestBody> = mutableMapOf()
-                    val newIncidentId = response.body()!!.data.id.toString()
+
                     // Referencia
                     partMap["ref"] = "api::incident.incident".toRequestBody("text/plain".toMediaType())
                     // Id del incidente
+                    val newIncidentId = response.body()!!.data.id.toString()
                     partMap["refId"] = newIncidentId.toRequestBody("text/plain".toMediaType())
                     // Campo de la colección
                     partMap["field"] = "evidence".toRequestBody("text/plain".toMediaType())
@@ -105,7 +111,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
                 }
             }
             // Se ha creado el incidente
-            return Result.success(response.body()!!.data.id)
+            return Result.success(response.body()!!.data.toExternal())
         } else {
             // No se ha creado
             return Result.failure(IncidentNotCreatedException())

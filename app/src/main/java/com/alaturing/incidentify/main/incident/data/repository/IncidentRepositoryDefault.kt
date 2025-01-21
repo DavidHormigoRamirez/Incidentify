@@ -1,6 +1,7 @@
 package com.alaturing.incidentify.main.incident.data.repository
 
 import android.net.Uri
+import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import kotlinx.coroutines.flow.Flow
@@ -8,15 +9,24 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class IncidentRepositoryDefault @Inject constructor(
-    private val remote: IncidentRemoteDatasource
+    private val remote: IncidentRemoteDatasource,
+    private val local: IncidentLocalDatasource
 ):IncidentRepository {
     override suspend fun readAll(): Result<List<Incident>> {
         val result = remote.readAll()
+
         return result
     }
 
-    override suspend fun createOne(description:String,evidence: Uri?): Result<Int> {
+    override suspend fun createOne(description:String,evidence: Uri?): Result<Incident> {
+        // Subimos el incidente al backend
         val result = remote.createOne(description,evidence)
+        if (result.isSuccess) {
+            val incident = result.getOrNull()
+            incident?.let {
+                local.createOne(incident)
+            }
+        }
         return result
     }
 
