@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.alaturing.incidentify.databinding.FragmentIncidentsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,7 +40,8 @@ class IncidentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = IncidentsAdapter()
+        // TODO Añadir callback para navegar
+        val adapter = IncidentsAdapter(::toIncidentMap)
         val rv = binding.incidentRv
         rv.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
@@ -67,6 +69,15 @@ class IncidentsFragment : Fragment() {
             findNavController().navigate(IncidentsFragmentDirections.actionIncidentsFragmentToIncidentEditFragment())
         }
 
+
+
+
+
+    }
+
+    private fun toIncidentMap(v:View) {
+        val action = IncidentsFragmentDirections.actionIncidentsFragmentToIncidentMapsFragment()
+        v.findNavController().navigate(action)
     }
 
 

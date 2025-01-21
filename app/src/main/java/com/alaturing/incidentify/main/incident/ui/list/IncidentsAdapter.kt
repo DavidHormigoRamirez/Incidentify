@@ -1,6 +1,7 @@
 package com.alaturing.incidentify.main.incident.ui.list
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,13 +13,18 @@ import com.alaturing.incidentify.main.incident.model.Incident
 /**
  * Adaptarador que implementa [ListAdapter] para incidencias
  */
-class IncidentsAdapter: ListAdapter<Incident, IncidentsAdapter.IncidentViewHolder>(
+class IncidentsAdapter constructor(
+    private val toMaps: (View)->Unit
+): ListAdapter<Incident, IncidentsAdapter.IncidentViewHolder>(
     IncidentDiffCallback
 ) {
 
     inner class IncidentViewHolder(
         private val binding:IncidentItemBinding
     ):ViewHolder(binding.root) {
+        init {
+            binding.showMapBtn.setOnClickListener(toMaps)
+        }
         fun bind(i:Incident) {
             binding.incidentDescription.text = i.description
             binding.incidentStatus.isChecked = i.solved

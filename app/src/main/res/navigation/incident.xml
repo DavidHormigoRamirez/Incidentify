@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_incidentsFragment_to_incidentEditFragment"
             app:destination="@id/incidentEditFragment" />
+        <action
+            android:id="@+id/action_incidentsFragment_to_incidentMapsFragment"
+            app:destination="@id/incidentMapsFragment" />
     </fragment>
     <fragment
         android:id="@+id/incidentEditFragment"
@@ -37,4 +40,9 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </fragment>
+    <fragment
+        android:id="@+id/incidentMapsFragment"
+        android:name="com.alaturing.incidentify.main.incident.ui.edit.IncidentMapsFragment"
+        android:label="fragment_incident_maps"
+        tools:layout="@layout/fragment_incident_maps" />
 </navigation>

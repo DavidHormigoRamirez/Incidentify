@@ -34,6 +34,12 @@
             android:text="@string/solved"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/show_map_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Show incident on map"
+            style="@style/Widget.MaterialComponents.Button.TextButton"/>
     </LinearLayout>
     </LinearLayout>
 
