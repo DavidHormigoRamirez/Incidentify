@@ -9,6 +9,8 @@ data class Incident(
     val description:String,
     val solved:Boolean,
     val solved_at:Long? = null,
+    val latitude: Double? = null,
+    val longitude: Double? = null,
     val smallPhotoUrl:String?=null,
     val thumbnailUrl:String?=null,
 

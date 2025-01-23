@@ -9,5 +9,7 @@ data class IncidentEntity(
     val id: Int,
     val description: String,
     val solved: Boolean,
-    val solved_at:Long?
+    val solved_at:Long?,
+    val latitude:Double?,
+    val longitude:Double?,
 )

@@ -44,5 +44,9 @@
         android:id="@+id/incidentMapsFragment"
         android:name="com.alaturing.incidentify.main.incident.ui.edit.IncidentMapsFragment"
         android:label="fragment_incident_maps"
-        tools:layout="@layout/fragment_incident_maps" />
+        tools:layout="@layout/fragment_incident_maps" >
+        <argument
+            android:name="incidentId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

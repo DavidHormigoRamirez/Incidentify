@@ -8,7 +8,15 @@ interface IncidentRepository {
 
     suspend fun readAll():Result<List<Incident>>
 
-    suspend fun createOne(description:String,evidence: Uri?):Result<Incident>
+    suspend fun readOne(id:Int):Result<Incident>
+
+    suspend fun createOne(description:String,
+                          latitude: Double? = null,
+                          longitude: Double? = null,
+                          evidence: Uri?,
+                          ):Result<Incident>
+
+
 
     fun observeAll(): Flow<Result<List<Incident>>>
 }

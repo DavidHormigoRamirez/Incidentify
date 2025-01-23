@@ -50,10 +50,7 @@ interface  StrapiIncidentApi {
 
     @Multipart
     @POST("/api/upload")
-    suspend fun addIncidentEvidence(/**@Part("ref") ref:String="api::incident.incident",
-                                    @Part("refId") refId:Int,
-                                    @Part("field") field:String="evidence",*/
-                                    @PartMap partMap: MutableMap<String,RequestBody>,
+    suspend fun addIncidentEvidence(@PartMap partMap: MutableMap<String,RequestBody>,
                                     @Part files: MultipartBody.Part ):Response<List<CreatedMediaItemResponse>>
 
 

@@ -18,9 +18,18 @@ class IncidentRepositoryDefault @Inject constructor(
         return result
     }
 
-    override suspend fun createOne(description:String,evidence: Uri?): Result<Incident> {
+    override suspend fun readOne(id:Int): Result<Incident> {
+        return local.readOne(id)
+    }
+
+    override suspend fun createOne(
+        description: String,
+        latitude: Double?,
+        longitude: Double?,
+        evidence: Uri?
+    ): Result<Incident> {
         // Subimos el incidente al backend
-        val result = remote.createOne(description,evidence)
+        val result = remote.createOne(description,evidence,latitude,longitude)
         if (result.isSuccess) {
             val incident = result.getOrNull()
             incident?.let {

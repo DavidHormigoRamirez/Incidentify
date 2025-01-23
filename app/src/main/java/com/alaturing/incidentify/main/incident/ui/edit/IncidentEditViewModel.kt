@@ -1,9 +1,12 @@
 package com.alaturing.incidentify.main.incident.ui.edit
 
+import android.annotation.SuppressLint
+import android.location.Location
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,7 +22,7 @@ import javax.inject.Inject
 class IncidentEditViewModel @Inject constructor(
     private val repository: IncidentRepository
 ): ViewModel()  {
-
+    //private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val _uiState = MutableStateFlow<IncidentEditUiState>(IncidentEditUiState.New)
     val uiState:StateFlow<IncidentEditUiState>
         get() = _uiState.asStateFlow()
@@ -41,9 +44,17 @@ class IncidentEditViewModel @Inject constructor(
 
     }
 
-    fun onSaveNewIncident(description:String,evidence:Uri?) {
+    @SuppressLint("MissingPermission")
+    fun onSaveNewIncident(description:String, evidence:Uri?, location:Location?=null) {
+
         viewModelScope.launch {
-            val result = repository.createOne(description,evidence)
+
+            val result = repository.createOne(
+                description,
+                location?.longitude,
+                location?.latitude,
+                evidence,
+                )
             if (result.isSuccess) {
                 // TODO CAmbiar para emitir todo el incidnete
                 _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!.id)

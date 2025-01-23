@@ -9,7 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.alaturing.incidentify.databinding.FragmentIncidentsBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,14 +69,11 @@ class IncidentsFragment : Fragment() {
         }
 
 
-
-
-
     }
 
-    private fun toIncidentMap(v:View) {
-        val action = IncidentsFragmentDirections.actionIncidentsFragmentToIncidentMapsFragment()
-        v.findNavController().navigate(action)
+    private fun toIncidentMap(id:Int) {
+        val action = IncidentsFragmentDirections.actionIncidentsFragmentToIncidentMapsFragment(id)
+        findNavController().navigate(action)
     }
 
 

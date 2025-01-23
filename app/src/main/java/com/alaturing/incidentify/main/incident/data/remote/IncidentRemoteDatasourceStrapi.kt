@@ -18,7 +18,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-
 import javax.inject.Inject
 
 /**
@@ -55,66 +54,86 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
     /**
      * @return Id del incidente creado
      */
-    override suspend fun createOne(description: String, evidence: Uri?): Result<Incident> {
+    override suspend fun createOne(
+        description: String,
+        evidence: Uri?,
+        latitude: Double?,
+        longitude: Double?
+    ): Result<Incident> {
+
         // Convertimos a remoto
         val newIncident = CreateIncidentPayloadDataWrapper(
             CreateIncidentPayload(
                 description = description,
-                solved = false
+                solved = false,
+                latitude,
+                longitude
             )
         )
 
         // Creamos el incidente en la API
         val response = api.createIncident(newIncident)
-
+        // si se ha credo subimos el fichero
         if (response.isSuccessful) {
-            // Se ha creado el incidente
+            // Se ha creado el incidente, si no es nula la imagen la subimos
             evidence?.let { uri ->
-                try {
-
-                    // Obtenemos el resolver de MediaStore
-                    val resolver = context.contentResolver
-                    // Abrimos el input stream a partir de la URI
-                    val inputStream = resolver.openInputStream(uri) ?: throw IllegalArgumentException("Cannot open InputStream from Uri")
-                    // Obtenemos el tipo del fichero
-                    val mimeType = resolver.getType(uri) ?: "image/*"
-                    // Obtenemos el nombre local, esto podiamos cambiarlo a otro patrón
-                    val fileName = uri.lastPathSegment ?: "evidence.jpg"
-                    // Convertimos el fichero a cuerpo de la petición
-                    val requestBody = inputStream.readBytes().toRequestBody(mimeType.toMediaTypeOrNull())
-
-
-                    // Construimos la parte de la petición
-                    val part = MultipartBody.Part.createFormData("files", fileName, requestBody)
-                    // Map con el resto de parámetros
-                    val partMap: MutableMap<String, RequestBody> = mutableMapOf()
-
-                    // Referencia
-                    partMap["ref"] = "api::incident.incident".toRequestBody("text/plain".toMediaType())
-                    // Id del incidente
-                    val newIncidentId = response.body()!!.data.id.toString()
-                    partMap["refId"] = newIncidentId.toRequestBody("text/plain".toMediaType())
-                    // Campo de la colección
-                    partMap["field"] = "evidence".toRequestBody("text/plain".toMediaType())
-
-                    // Subimos el fichero
-                    val imageResponse = api.addIncidentEvidence(
-                        partMap,
-                        files = part,
-                    )
-                    // Si ha ido mal la subida, salimos con error
-                    if (!imageResponse.isSuccessful) {
-                        return Result.failure(IncidentEvidenceUploadException())
-                    }
-                } catch (e: Exception) {
-                    return Result.failure(e)
-                }
+                val imageUploaded = uploadIncidentEvidence(uri,response.body()!!.data.id)
+                // TODO hacemos algo con el resultado de subir el fichero?
             }
             // Se ha creado el incidente
             return Result.success(response.body()!!.data.toExternal())
         } else {
             // No se ha creado
             return Result.failure(IncidentNotCreatedException())
+        }
+    }
+
+    private suspend fun uploadIncidentEvidence(
+        uri: Uri,
+        incidentId: Int,
+    ): Result<Int> {
+        try {
+
+            // Obtenemos el resolver de MediaStore
+            val resolver = context.contentResolver
+            // Abrimos el input stream a partir de la URI
+            val inputStream = resolver.openInputStream(uri)
+                ?: throw IllegalArgumentException("Cannot open InputStream from Uri")
+            // Obtenemos el tipo del fichero
+            val mimeType = resolver.getType(uri) ?: "image/*"
+            // Obtenemos el nombre local, esto podiamos cambiarlo a otro patrón
+            val fileName = uri.lastPathSegment ?: "evidence.jpg"
+            // Convertimos el fichero a cuerpo de la petición
+            val requestBody = inputStream.readBytes().toRequestBody(mimeType.toMediaTypeOrNull())
+
+
+            // Construimos la parte de la petición
+            val part = MultipartBody.Part.createFormData("files", fileName, requestBody)
+            // Map con el resto de parámetros
+            val partMap: MutableMap<String, RequestBody> = mutableMapOf()
+
+            // Referencia
+            partMap["ref"] = "api::incident.incident".toRequestBody("text/plain".toMediaType())
+            // Id del incidente
+
+            partMap["refId"] = incidentId.toString().toRequestBody("text/plain".toMediaType())
+            // Campo de la colección
+            partMap["field"] = "evidence".toRequestBody("text/plain".toMediaType())
+
+            // Subimos el fichero
+            val imageResponse = api.addIncidentEvidence(
+                partMap,
+                files = part,
+            )
+            // Si ha ido mal la subida, salimos con error
+            if (!imageResponse.isSuccessful) {
+                return Result.failure(IncidentEvidenceUploadException())
+            }
+            else {
+                return Result.success(imageResponse.body()!!.first().id)
+            }
+        } catch (e: Exception) {
+            return Result.failure(e)
         }
     }
 

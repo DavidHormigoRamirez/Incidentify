@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.incident.data.local
 
+import com.alaturing.incidentify.common.exception.IncidentNotFoundException
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentDao
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentEntity
 import com.alaturing.incidentify.main.incident.model.Incident
@@ -11,6 +12,26 @@ class IncidentLocalDataSourceRoom @Inject constructor(
 ):IncidentLocalDatasource {
     override suspend fun readAll(): Result<List<Incident>> {
         TODO("Not yet implemented")
+    }
+
+    override suspend fun readOne(id: Int): Result<Incident> {
+        val entity:IncidentEntity? = dao.readOne(id)
+
+        entity?.let {
+            return@readOne Result.success(
+                Incident(
+                    id = it.id,
+                    description = it.description,
+                    solved = it.solved,
+                    solved_at = it.solved_at,
+                    latitude = it.latitude,
+                    longitude = it.longitude,
+                    smallPhotoUrl = null,
+                    thumbnailUrl = null,
+                )
+            )
+        }
+        return Result.failure(IncidentNotFoundException())
     }
 
     override suspend fun createOne(incident: Incident): Result<Incident> {
@@ -29,7 +50,9 @@ private fun Incident.toEntity(): IncidentEntity {
         id = this.id,
         description = this.description,
         solved = this.solved,
-        solved_at = this.solved_at
+        solved_at = this.solved_at,
+        latitude = this.latitude,
+        longitude = this.longitude,
     )
 
 }

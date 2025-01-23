@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.di
 
+
 import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
@@ -12,6 +13,7 @@ import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDataSourc
 import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasourceStrapi
+
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

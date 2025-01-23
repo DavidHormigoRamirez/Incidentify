@@ -15,5 +15,7 @@ interface IncidentDao {
     suspend fun readAllIncidents():List<IncidentEntity>
     @Query("SELECT * FROM incident")
     fun observeIncidents(): Flow<List<IncidentEntity>>
+    @Query("SELECT * FROM incident WHERE id = :id")
+    suspend fun readOne(id:Int):IncidentEntity?
 
 }

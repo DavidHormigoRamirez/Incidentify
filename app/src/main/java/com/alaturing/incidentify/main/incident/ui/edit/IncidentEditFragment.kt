@@ -1,8 +1,10 @@
 package com.alaturing.incidentify.main.incident.ui.edit
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -21,38 +23,49 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil3.load
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
+import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-private var PERMISSIONS_REQUIRED = arrayOf(
-    Manifest.permission.CAMERA,
-    Manifest.permission.RECORD_AUDIO,)
 
 @AndroidEntryPoint
-class IncidentEditFragment : Fragment() {
+class IncidentEditFragment @Inject constructor() : Fragment() {
 
     private var _photoUri:Uri? = null
     private val viewModel: IncidentEditViewModel by activityViewModels()
+    @Inject
+    lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var binding: FragmentIncidentEditBinding
-
+    private val cameraPermissionContract = ActivityResultContracts.RequestPermission()
+    private val cameraPermissionLauncher = registerForActivityResult(cameraPermissionContract) {
+        isGranted ->
+            if (isGranted)
+                navigateToCamera()
+            else
+                Toast.makeText(requireContext(),
+                    "No hay permisos para la camara",
+                    Toast.LENGTH_LONG,
+                    ).show()
+    }
     // Contrato de permisos múltiples
-    private val contract = ActivityResultContracts.RequestMultiplePermissions()
+    private val mapContract = ActivityResultContracts.RequestMultiplePermissions()
+
     // Registramos el fragmento para gestionar la elección de permisos del usuario
-    private val launcher = registerForActivityResult(contract) {
+    private val mapPermissionLauncher = registerForActivityResult(mapContract) {
             permissions ->
         var hasPermissions = true
         permissions.entries.forEach { permission ->
-            if (permission.key in PERMISSIONS_REQUIRED && !permission.value) {
+            if (permission.key in MAP_REQUIRED_PERMISSIONS  && !permission.value) {
                 hasPermissions = false
             }
         }
+        // SILENCIOSO
         if (!hasPermissions) {
             Toast.makeText(requireContext(), "No tienes permisos", Toast.LENGTH_LONG).show()
         }
-        else {
-            navigateToCamera()
-        }
     }
+
 
     // Registramos el fragmento como receptor de un seleccionador de media
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -80,9 +93,12 @@ class IncidentEditFragment : Fragment() {
     }
 
 
-
+    @SuppressLint("MissingPermission")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Vamos a pedir permisos para la localización
+        mapPermissionLauncher.launch(MAP_REQUIRED_PERMISSIONS)
 
         // Control estado de la pantalla
         viewLifecycleOwner.lifecycleScope.launch {
@@ -91,7 +107,7 @@ class IncidentEditFragment : Fragment() {
                     uiState ->
                     when(uiState) {
                         is IncidentEditUiState.Created -> {
-                            // Se ha creado el incidente
+                            // Se ha creado el incidente, volvemos
                             findNavController().popBackStack()
                         }
                         is IncidentEditUiState.Error -> {
@@ -110,7 +126,6 @@ class IncidentEditFragment : Fragment() {
         // Esto debe navegar a la vista de camara, por lo que antes de realizarlo vamos a comprobar
         // que tiene permisos para la camara
         binding.showCameraBtn.setOnClickListener {
-            //onShowMediaSelector()
 
             // SI TENEMOS PERMISOS NAVEGAMOS A LA CAMARA
             if (hasCameraPermissions(requireContext())) {
@@ -118,7 +133,7 @@ class IncidentEditFragment : Fragment() {
             }
             else {
                 // SI NO TENEMOS PERMISOS, LOS PEDIMOS
-                launcher.launch(PERMISSIONS_REQUIRED)
+                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
             }
         }
 
@@ -129,12 +144,28 @@ class IncidentEditFragment : Fragment() {
 
         // Manejador evento de creación
         binding.saveIncidentBtn.setOnClickListener {
+            var currentLocation: Location? = null
             viewLifecycleOwner.lifecycleScope.launch {
-                val photoUri = _photoUri
-                viewModel.onSaveNewIncident(binding.incidentDescriptionInput.text.toString(),
-                    photoUri)
+
+                if (hasMapPermissions()) {
+                    fusedLocationClient.lastLocation
+                        .addOnSuccessListener { location : Location? ->
+
+                            viewModel.onSaveNewIncident(
+                                binding.incidentDescriptionInput.text.toString(),
+                                _photoUri,
+                                location,)
+                        }
+                }
+                else {
+                    viewModel.onSaveNewIncident(
+                        binding.incidentDescriptionInput.text.toString(),
+                        _photoUri,)
+                }
+                }
+
             }
-        }
+
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.photo.collect {
@@ -165,13 +196,12 @@ class IncidentEditFragment : Fragment() {
      * @param context Contexto de la aplicación
      * @return Si tiene permisos para usar la camara
      */
-    private fun hasCameraPermissions(context: Context):Boolean {
+    private fun hasCameraPermissions(context: Context) =
         // Tenemos permiso si todos los permisos han sido concecidos
-        return PERMISSIONS_REQUIRED.all { p ->
-            ContextCompat.checkSelfPermission(context, p) == PackageManager.PERMISSION_GRANTED
-        }
-
-    }
+        //return PERMISSIONS_REQUIRED.all { p ->
+        //    ContextCompat.checkSelfPermission(context, p) == PackageManager.PERMISSION_GRANTED
+        //}
+        ContextCompat.checkSelfPermission(context,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
     /**
      * Función que navega al fragmento de Preview de camara
@@ -181,6 +211,17 @@ class IncidentEditFragment : Fragment() {
         findNavController().navigate(action)
     }
 
+    private fun hasMapPermissions():Boolean {
+        // Tenemos permiso si todos los permisos han sido concecidos
+        return MAP_REQUIRED_PERMISSIONS.all { p ->
+            ContextCompat.checkSelfPermission(requireContext(), p) == PackageManager.PERMISSION_GRANTED
+        }
+    }
 
-
+    companion object {
+        val  MAP_REQUIRED_PERMISSIONS = arrayOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    }
 }
