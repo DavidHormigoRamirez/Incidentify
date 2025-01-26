@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.incident.data.remote.model
 
+import androidx.core.net.toUri
 import com.alaturing.incidentify.di.NetworkModule
 import com.alaturing.incidentify.main.incident.model.Incident
 
@@ -8,8 +9,9 @@ fun IncidentResponse.toModel(): Incident {
         id = this.id,
         description = this.attributes.description,
         solved = this.attributes.solved ?: false,
-        smallPhotoUrl = NetworkModule.STRAPI + this.attributes.evidence?.formats?.small?.url,
-        thumbnailUrl = NetworkModule.STRAPI + this.attributes.evidence?.formats?.thumbnail?.url
+        photoUri = "${NetworkModule.STRAPI}${this.attributes.evidence?.formats?.small?.url}".toUri()
+        //smallPhotoUrl = NetworkModule.STRAPI + this.attributes.evidence?.formats?.small?.url,
+        //thumbnailUrl = NetworkModule.STRAPI + this.attributes.evidence?.formats?.thumbnail?.url
     )
 }
 fun List<IncidentResponse>.toModel():List<Incident> = map(IncidentResponse::toModel)

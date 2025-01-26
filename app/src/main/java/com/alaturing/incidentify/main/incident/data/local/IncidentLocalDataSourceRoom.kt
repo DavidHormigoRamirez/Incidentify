@@ -5,31 +5,23 @@ import com.alaturing.incidentify.main.incident.data.local.database.IncidentDao
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentEntity
 import com.alaturing.incidentify.main.incident.model.Incident
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class IncidentLocalDataSourceRoom @Inject constructor(
     private val dao: IncidentDao
 ):IncidentLocalDatasource {
+
     override suspend fun readAll(): Result<List<Incident>> {
-        TODO("Not yet implemented")
+        val incidents = dao.readAllIncidents().map(IncidentEntity::toExternal)
+        return Result.success(incidents)
     }
 
     override suspend fun readOne(id: Int): Result<Incident> {
         val entity:IncidentEntity? = dao.readOne(id)
 
         entity?.let {
-            return@readOne Result.success(
-                Incident(
-                    id = it.id,
-                    description = it.description,
-                    solved = it.solved,
-                    solved_at = it.solved_at,
-                    latitude = it.latitude,
-                    longitude = it.longitude,
-                    smallPhotoUrl = null,
-                    thumbnailUrl = null,
-                )
-            )
+            return@readOne Result.success(it.toExternal())
         }
         return Result.failure(IncidentNotFoundException())
     }
@@ -40,19 +32,15 @@ class IncidentLocalDataSourceRoom @Inject constructor(
     }
 
 
-    override fun observeAll(): Flow<List<Incident>> {
-        TODO("Not yet implemented")
+
+    override fun observeAll(): Flow<Result<List<Incident>>> {
+        return dao.observeIncidents().map {
+            entities ->
+            val incidents = entities.toExternal()
+            Result.success(incidents)
+
+        }
     }
 }
 
-private fun Incident.toEntity(): IncidentEntity {
-    return IncidentEntity(
-        id = this.id,
-        description = this.description,
-        solved = this.solved,
-        solved_at = this.solved_at,
-        latitude = this.latitude,
-        longitude = this.longitude,
-    )
 
-}

@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.incident.data.remote.model
 
+import androidx.core.net.toUri
 import com.alaturing.incidentify.main.incident.model.Incident
 
 data class IncidentsResponseBody(
@@ -20,8 +21,9 @@ fun IncidentResponse.toExternal(): Incident {
         id = this.id,
         description = this.attributes.description,
         solved = this.attributes.solved,
-        smallPhotoUrl = this.attributes.evidence?.formats?.small?.url,
-        thumbnailUrl = this.attributes.evidence?.formats?.thumbnail?.url,
+        photoUri = this.attributes.evidence?.formats?.small?.url?.toUri(),
+        //smallPhotoUrl = this.attributes.evidence?.formats?.small?.url,
+        //thumbnailUrl = this.attributes.evidence?.formats?.thumbnail?.url,
         latitude = this.attributes.latitude,
         longitude = this.attributes.longitude,
     )
@@ -65,5 +67,6 @@ data class CreateIncidentPayload(
 data class CreatedMediaItemResponse(
     val id:Int,
     val documentId: String,
-    val name:String
+    val name:String,
+    val formats: MediaFormats
 )

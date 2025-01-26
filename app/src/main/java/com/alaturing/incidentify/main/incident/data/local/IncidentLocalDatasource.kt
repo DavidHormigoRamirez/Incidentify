@@ -13,5 +13,5 @@ interface IncidentLocalDatasource {
      */
     suspend fun createOne(incident:Incident):Result<Incident>
 
-    fun observeAll(): Flow<List<Incident>>
+    fun observeAll(): Flow<Result<List<Incident>>>
 }

@@ -28,8 +28,8 @@ class IncidentsAdapter constructor(
             }
             binding.incidentDescription.text = i.description
             binding.incidentStatus.isChecked = i.solved
-             if (i.smallPhotoUrl!=null) {
-                binding.evidenceImage.load(i.smallPhotoUrl)
+             if (i.photoUri!=null) {
+                binding.evidenceImage.load(i.photoUri)
             }
             else {
                 // TODO poner un placeholder

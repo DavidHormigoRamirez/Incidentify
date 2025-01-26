@@ -4,8 +4,10 @@ import android.net.Uri
 import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class IncidentRepositoryDefault @Inject constructor(
@@ -32,18 +34,28 @@ class IncidentRepositoryDefault @Inject constructor(
         val result = remote.createOne(description,evidence,latitude,longitude)
         if (result.isSuccess) {
             val incident = result.getOrNull()
+            /**val copyIncident = incident?.copy(
+                photoUri = evidence
+            )
+            copyIncident?.let {
+                local.createOne(it)
+            }*/
             incident?.let {
-                local.createOne(incident)
+                local.createOne(it)
             }
         }
         return result
     }
 
     override fun observeAll(): Flow<Result<List<Incident>>> {
-        val incidents = flow<Result<List<Incident>>> {
+
+        return local.observeAll()
+
+
+        /**val incidents = flow<Result<List<Incident>>> {
             val result = remote .readAll()
             emit(result)
         }
-        return incidents
+        return incidents*/
     }
 }

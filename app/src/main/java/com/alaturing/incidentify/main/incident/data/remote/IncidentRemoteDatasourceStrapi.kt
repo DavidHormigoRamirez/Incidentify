@@ -2,10 +2,12 @@ package com.alaturing.incidentify.main.incident.data.remote
 
 import android.content.Context
 import android.net.Uri
+import androidx.core.net.toUri
 import com.alaturing.incidentify.common.exception.IncidentEvidenceUploadException
 import com.alaturing.incidentify.common.exception.IncidentNotCreatedException
 import com.alaturing.incidentify.common.exception.UserNotAuthorizedException
 import com.alaturing.incidentify.common.remote.StrapiApi
+import com.alaturing.incidentify.di.NetworkModule
 import com.alaturing.incidentify.main.incident.data.remote.model.CreateIncidentPayload
 import com.alaturing.incidentify.main.incident.data.remote.model.CreateIncidentPayloadDataWrapper
 import com.alaturing.incidentify.main.incident.data.remote.model.toExternal
@@ -75,13 +77,20 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
         val response = api.createIncident(newIncident)
         // si se ha credo subimos el fichero
         if (response.isSuccessful) {
+            var uploadedIncident = response.body()!!.data.toExternal()
             // Se ha creado el incidente, si no es nula la imagen la subimos
             evidence?.let { uri ->
                 val imageUploaded = uploadIncidentEvidence(uri,response.body()!!.data.id)
-                // TODO hacemos algo con el resultado de subir el fichero?
+                // Si ha subido obtenemos la Uri
+                if( imageUploaded.isSuccess) {
+                    val uploadedUri = imageUploaded.getOrNull()!!
+                    uploadedIncident = uploadedIncident.copy(
+                        photoUri = uploadedUri
+                    )
+                }
             }
             // Se ha creado el incidente
-            return Result.success(response.body()!!.data.toExternal())
+            return Result.success(uploadedIncident)
         } else {
             // No se ha creado
             return Result.failure(IncidentNotCreatedException())
@@ -91,7 +100,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
     private suspend fun uploadIncidentEvidence(
         uri: Uri,
         incidentId: Int,
-    ): Result<Int> {
+    ): Result<Uri> {
         try {
 
             // Obtenemos el resolver de MediaStore
@@ -130,7 +139,8 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
                 return Result.failure(IncidentEvidenceUploadException())
             }
             else {
-                return Result.success(imageResponse.body()!!.first().id)
+                val remoteUri= "${NetworkModule.STRAPI}${imageResponse.body()!!.first().formats.small.url}"
+                return Result.success(remoteUri.toUri())
             }
         } catch (e: Exception) {
             return Result.failure(e)

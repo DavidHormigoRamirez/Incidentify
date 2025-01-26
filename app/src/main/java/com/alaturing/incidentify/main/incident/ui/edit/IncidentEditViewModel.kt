@@ -51,8 +51,8 @@ class IncidentEditViewModel @Inject constructor(
 
             val result = repository.createOne(
                 description,
-                location?.longitude,
                 location?.latitude,
+                location?.longitude,
                 evidence,
                 )
             if (result.isSuccess) {

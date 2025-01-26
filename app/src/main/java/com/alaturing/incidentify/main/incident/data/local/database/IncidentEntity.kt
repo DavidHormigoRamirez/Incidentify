@@ -12,4 +12,7 @@ data class IncidentEntity(
     val solved_at:Long?,
     val latitude:Double?,
     val longitude:Double?,
+    val photoUri:String?,
+    //val smallUrl:String?,
+    //val thumbnailUrl:String?,
 )
