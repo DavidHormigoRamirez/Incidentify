@@ -2,6 +2,7 @@ package com.alaturing.incidentify.di
 
 import android.content.Context
 import androidx.work.WorkManager
+import androidx.work.impl.WorkManagerImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

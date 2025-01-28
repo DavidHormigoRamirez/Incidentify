@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.incident.data.repository
 
+import android.content.Context
 import android.net.Uri
 import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequest
@@ -11,6 +12,7 @@ import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasourc
 import com.alaturing.incidentify.main.incident.data.local.UploadIncidentWorker
 import com.alaturing.incidentify.main.incident.model.Incident
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -21,6 +23,7 @@ import javax.inject.Inject
 class IncidentRepositoryDefault @Inject constructor(
     private val remote: IncidentRemoteDatasource,
     private val local: IncidentLocalDatasource,
+    //@ApplicationContext private val context: Context
     private val workManager: WorkManager
 ):IncidentRepository {
     override suspend fun readAll(): Result<List<Incident>> {
@@ -59,6 +62,7 @@ class IncidentRepositoryDefault @Inject constructor(
                     WorkRequest.MIN_BACKOFF_MILLIS,
                     TimeUnit.MILLISECONDS
                 ).build()
+            //WorkManager.getInstance(context).enqueue(uploadWorkRequest)
             workManager.enqueue(uploadWorkRequest)
             Result.success(localResult.getOrNull()!!)
         }

@@ -50,7 +50,6 @@ abstract class AppModule {
      */
     @Binds
     @Singleton
-    //abstract fun bindMockRemoteDatasource(ds:RemoteDatasourceMock):RemoteDatasource
     abstract fun bindUserRemoteDatasource(ds: UserRemoteDatasourceStrapi): UserRemoteDatasource
 
     @Binds
@@ -65,7 +64,6 @@ abstract class AppModule {
      */
     @Binds
     @Singleton
-    //abstract fun bindMockUserDatasourceLocal(ds:UserLocalDatasourceMock): UserLocalDatasource
     abstract fun bindUserDatasourceLocal(ds: UserLocalDatasourceDS): UserLocalDatasource
 
 

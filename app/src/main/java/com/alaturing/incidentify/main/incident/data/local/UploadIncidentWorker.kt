@@ -1,23 +1,30 @@
 package com.alaturing.incidentify.main.incident.data.local
 
 import android.content.Context
+import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
+import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import javax.inject.Inject
+
 @HiltWorker
 class UploadIncidentWorker
     @AssistedInject constructor(
+
         @Assisted appContext:Context,
         @Assisted params: WorkerParameters,
-        private val localDS: IncidentLocalDatasource,
-        private val remoteDS: IncidentRemoteDatasource
+        val localDS: IncidentLocalDatasource,
+        val remoteDS: IncidentRemoteDatasource,
+
     ): CoroutineWorker(appContext,params) {
 
+
     override suspend fun doWork(): Result {
+        Log.d("DHR-WORKER","Starting background processing ...")
         val result = localDS.readUnsynched()
         // No hay incidentes
         return if (result.isFailure) {
@@ -49,11 +56,15 @@ class UploadIncidentWorker
                 }
             }
             return if (allSynched) {
+                Log.d("DHR-WORKER","Successful background processing")
                 Result.success()
             }
             else {
+                Log.d("DHR-WORKER","Some entries will be retried ...")
                 Result.retry()
             }
         }
     }
+
+
 }

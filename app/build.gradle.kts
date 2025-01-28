@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     // SOLO CUANDO SE USA HILT
     implementation(libs.androidx.hilt.work)
+    kapt("androidx.hilt:hilt-compiler:1.2.0")
     //Maps
     implementation(libs.play.services.maps)
 
