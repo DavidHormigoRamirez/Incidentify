@@ -46,6 +46,11 @@ android {
 }
 
 dependencies {
+
+    // Worker Manager
+    implementation(libs.androidx.work.runtime.ktx)
+    // SOLO CUANDO SE USA HILT
+    implementation(libs.androidx.hilt.work)
     //Maps
     implementation(libs.play.services.maps)
 

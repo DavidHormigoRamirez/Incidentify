@@ -1,6 +1,7 @@
 package com.alaturing.incidentify.main.incident.data.local
 
 import com.alaturing.incidentify.common.exception.IncidentNotFoundException
+import com.alaturing.incidentify.common.exception.NoUnsynchedIncidentsException
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentDao
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentEntity
 import com.alaturing.incidentify.main.incident.model.Incident
@@ -40,6 +41,24 @@ class IncidentLocalDataSourceRoom @Inject constructor(
             Result.success(incidents)
 
         }
+    }
+
+    override suspend fun readUnsynched(): Result<List<Incident>> {
+        val entities = dao.readBySynch(false)
+        return if (entities.isEmpty()) {
+            Result.failure(NoUnsynchedIncidentsException())
+        }
+        else {
+            Result.success(entities.toExternal())
+        }
+    }
+
+    override suspend fun markAsSynched(incident: Incident) {
+        val entity = incident.toEntity()
+        val updatedEntity = entity.copy(
+            isSynch = true
+        )
+        dao.updateIncident(updatedEntity)
     }
 }
 

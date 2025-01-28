@@ -1,6 +1,8 @@
 package com.alaturing.incidentify.di
 
 
+import android.content.Context
+import androidx.work.WorkManager
 import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
@@ -16,7 +18,9 @@ import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasou
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -63,6 +67,8 @@ abstract class AppModule {
     @Singleton
     //abstract fun bindMockUserDatasourceLocal(ds:UserLocalDatasourceMock): UserLocalDatasource
     abstract fun bindUserDatasourceLocal(ds: UserLocalDatasourceDS): UserLocalDatasource
+
+
 
 
 }

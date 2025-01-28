@@ -12,7 +12,9 @@ fun Incident.toEntity(): IncidentEntity {
         solved_at = this.solved_at,
         latitude = this.latitude,
         longitude = this.longitude,
-        photoUri = this.photoUri.toString()
+        photoUri = this.photoUri.toString(),
+        isSynch = false,
+        localId = 0
         //smallUrl = this.smallPhotoUrl,
         //thumbnailUrl = null
     )
@@ -20,7 +22,7 @@ fun Incident.toEntity(): IncidentEntity {
 }
 fun IncidentEntity.toExternal(): Incident {
     return Incident(
-        id = this.id,
+        id = this.id!!,
         description = this.description,
         solved = this.solved,
         solved_at = this.solved_at,
