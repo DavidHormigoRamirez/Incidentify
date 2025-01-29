@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class IncidentEntity(
     @PrimaryKey(autoGenerate = true)
     val localId:Int,
-    val id: Int?,
+    val remoteId: Int?,
     val description: String,
     val solved: Boolean,
     val solved_at:Long?,

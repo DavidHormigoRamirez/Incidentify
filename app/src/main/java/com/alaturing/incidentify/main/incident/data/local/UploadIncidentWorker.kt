@@ -4,12 +4,10 @@ import android.content.Context
 import android.util.Log
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
-import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import javax.inject.Inject
 
 @HiltWorker
 class UploadIncidentWorker
@@ -41,6 +39,7 @@ class UploadIncidentWorker
             // Por cada una, la subimos al remoto
             for (incident in unsyched) {
                 val uploaded = remoteDS.createOne(
+                    localId =  incident.localId,
                     description = incident.description,
                     evidence = incident.photoUri,
                     latitude = incident.latitude,

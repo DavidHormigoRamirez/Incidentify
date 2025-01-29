@@ -17,5 +17,5 @@ interface IncidentLocalDatasource {
 
     suspend fun readUnsynched():Result<List<Incident>>
 
-    suspend fun markAsSynched(incident:Incident)
+    suspend fun markAsSynched(incident:Incident):Result<Incident>
 }

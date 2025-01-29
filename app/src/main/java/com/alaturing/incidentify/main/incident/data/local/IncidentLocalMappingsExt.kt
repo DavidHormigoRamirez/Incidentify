@@ -6,7 +6,7 @@ import com.alaturing.incidentify.main.incident.model.Incident
 
 fun Incident.toEntity(): IncidentEntity {
     return IncidentEntity(
-        id = this.id,
+
         description = this.description,
         solved = this.solved,
         solved_at = this.solved_at,
@@ -14,23 +14,21 @@ fun Incident.toEntity(): IncidentEntity {
         longitude = this.longitude,
         photoUri = this.photoUri.toString(),
         isSynch = false,
-        localId = 0
-        //smallUrl = this.smallPhotoUrl,
-        //thumbnailUrl = null
+        localId = this.localId,
+        remoteId = this.remoteId
     )
 
 }
 fun IncidentEntity.toExternal(): Incident {
     return Incident(
-        id = this.id!!,
+        localId = this.localId,
+        remoteId = this.remoteId,
         description = this.description,
         solved = this.solved,
         solved_at = this.solved_at,
         latitude = this.latitude,
         longitude = this.longitude,
         photoUri = this.photoUri?.toUri(),
-        //smallPhotoUrl = this.smallUrl,
-        //thumbnailUrl = this.thumbnailUrl,
     )
 }
 fun List<IncidentEntity>.toExternal():List<Incident> {

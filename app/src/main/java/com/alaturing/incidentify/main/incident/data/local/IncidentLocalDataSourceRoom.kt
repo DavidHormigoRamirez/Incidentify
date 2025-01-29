@@ -1,5 +1,6 @@
 package com.alaturing.incidentify.main.incident.data.local
 
+
 import com.alaturing.incidentify.common.exception.IncidentNotFoundException
 import com.alaturing.incidentify.common.exception.NoUnsynchedIncidentsException
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentDao
@@ -8,6 +9,7 @@ import com.alaturing.incidentify.main.incident.model.Incident
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import android.util.Log
 
 class IncidentLocalDataSourceRoom @Inject constructor(
     private val dao: IncidentDao
@@ -53,12 +55,21 @@ class IncidentLocalDataSourceRoom @Inject constructor(
         }
     }
 
-    override suspend fun markAsSynched(incident: Incident) {
+    override suspend fun markAsSynched(incident: Incident):Result<Incident> {
         val entity = incident.toEntity()
         val updatedEntity = entity.copy(
             isSynch = true
         )
-        dao.updateIncident(updatedEntity)
+        val isUpdated = dao.updateIncident(updatedEntity)
+        if (isUpdated>0) {
+            Log.d("DHR","Entity updated")
+            Log.d("DHR",updatedEntity.toString())
+            return Result.success(updatedEntity.toExternal())
+        }
+        else {
+            Log.e("DHR","Entity not updated")
+            return Result.failure(IncidentNotFoundException())
+        }
     }
 }
 

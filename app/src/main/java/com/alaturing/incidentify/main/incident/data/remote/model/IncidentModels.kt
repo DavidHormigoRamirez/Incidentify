@@ -18,7 +18,7 @@ data class IncidentResponse(
 fun IncidentResponse.toExternal(): Incident {
 
     return Incident(
-        id = this.id,
+        remoteId = this.id,
         description = this.attributes.description,
         solved = this.attributes.solved,
         photoUri = this.attributes.evidence?.formats?.small?.url?.toUri(),
@@ -26,6 +26,8 @@ fun IncidentResponse.toExternal(): Incident {
         //thumbnailUrl = this.attributes.evidence?.formats?.thumbnail?.url,
         latitude = this.attributes.latitude,
         longitude = this.attributes.longitude,
+        localId = this.attributes.localId,
+        solved_at = this.attributes.solved_at?.toLong()
     )
 }
 
@@ -35,7 +37,8 @@ data class IncidentAttributes(
     val solved_at:String?,
     val evidence: Media?,
     val latitude: Double?,
-    val longitude: Double?
+    val longitude: Double?,
+    val localId:Int
 )
 
 data class Media(
@@ -58,6 +61,7 @@ data class CreateIncidentPayloadDataWrapper(
 )
 // Cuerpo
 data class CreateIncidentPayload(
+    val localId: Int,
     val description: String,
     val solved: Boolean,
     val latitude: Double?=null,

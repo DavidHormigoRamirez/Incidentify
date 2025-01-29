@@ -24,7 +24,7 @@ class IncidentsAdapter constructor(
 
         fun bind(i:Incident) {
             binding.showMapBtn.setOnClickListener {
-                toMaps(i.id)
+                toMaps(i.localId)
             }
             binding.incidentDescription.text = i.description
             binding.incidentStatus.isChecked = i.solved
@@ -54,7 +54,7 @@ class IncidentsAdapter constructor(
 
     object IncidentDiffCallback: DiffUtil.ItemCallback<Incident>() {
         override fun areItemsTheSame(oldItem: Incident, newItem: Incident): Boolean {
-            return oldItem.id == newItem.id
+            return oldItem.localId == newItem.localId
         }
 
         override fun areContentsTheSame(oldItem: Incident, newItem: Incident): Boolean {

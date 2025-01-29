@@ -11,7 +11,9 @@ interface IncidentRemoteDatasource {
     /**
      * @return Resultado de lista de incidentes
      */
-    suspend fun createOne(description:String,
+    suspend fun createOne(
+        localId:Int,
+        description:String,
                           evidence: Uri?,
                           latitude:Double?,
                           longitude:Double?,):Result<Incident>

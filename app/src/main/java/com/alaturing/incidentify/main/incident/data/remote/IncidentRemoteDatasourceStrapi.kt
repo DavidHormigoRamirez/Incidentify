@@ -57,6 +57,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
      * @return Id del incidente creado
      */
     override suspend fun createOne(
+        localId:Int,
         description: String,
         evidence: Uri?,
         latitude: Double?,
@@ -68,8 +69,9 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
             CreateIncidentPayload(
                 description = description,
                 solved = false,
-                latitude,
-                longitude
+                localId = localId,
+                latitude = latitude,
+                longitude = longitude
             )
         )
 

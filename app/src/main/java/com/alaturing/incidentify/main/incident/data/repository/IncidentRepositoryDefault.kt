@@ -44,13 +44,14 @@ class IncidentRepositoryDefault @Inject constructor(
     ): Result<Incident> {
         val localResult = local.createOne(
             Incident(
-                id = 0,
+                localId = 0,
                 description = description,
                 solved = false,
                 solved_at = null,
                 latitude = latitude,
                 longitude = longitude,
-                photoUri = evidence
+                photoUri = evidence,
+                remoteId = null
             )
 
         )

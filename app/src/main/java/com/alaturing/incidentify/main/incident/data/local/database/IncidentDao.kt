@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 interface IncidentDao {
 
     @Update
-    suspend fun updateIncident(incident: IncidentEntity)
+    suspend fun updateIncident(incident: IncidentEntity):Int
 
     @Insert
     suspend fun insertIncident(incident: IncidentEntity)
@@ -19,7 +19,7 @@ interface IncidentDao {
     suspend fun readAllIncidents():List<IncidentEntity>
     @Query("SELECT * FROM incident")
     fun observeIncidents(): Flow<List<IncidentEntity>>
-    @Query("SELECT * FROM incident WHERE id = :id")
+    @Query("SELECT * FROM incident WHERE localId = :id")
     suspend fun readOne(id:Int):IncidentEntity?
 
     @Query("SELECT * FROM incident WHERE isSynch = :isSynch")

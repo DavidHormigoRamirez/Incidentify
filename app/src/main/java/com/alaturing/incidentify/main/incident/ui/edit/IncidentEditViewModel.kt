@@ -57,7 +57,7 @@ class IncidentEditViewModel @Inject constructor(
                 )
             if (result.isSuccess) {
                 // TODO CAmbiar para emitir todo el incidnete
-                _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!.id)
+                _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!.localId)
             }
         }
 
