@@ -57,7 +57,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
      * @return Id del incidente creado
      */
     override suspend fun createOne(
-        localId:Int,
+        localId:Long,
         description: String,
         evidence: Uri?,
         latitude: Double?,
@@ -101,7 +101,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
 
     private suspend fun uploadIncidentEvidence(
         uri: Uri,
-        incidentId: Int,
+        incidentId: Long,
     ): Result<Uri> {
         try {
 

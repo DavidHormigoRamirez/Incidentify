@@ -13,7 +13,7 @@ import com.alaturing.incidentify.main.incident.model.Incident
  * Adaptarador que implementa [ListAdapter] para incidencias
  */
 class IncidentsAdapter constructor(
-    private val toMaps: (Int)->Unit
+    private val toMaps: (Long)->Unit
 ): ListAdapter<Incident, IncidentsAdapter.IncidentViewHolder>(
     IncidentDiffCallback
 ) {

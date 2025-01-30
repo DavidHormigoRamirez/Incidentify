@@ -10,7 +10,7 @@ data class IncidentResponseBody(
     val data: IncidentResponse
 )
 data class IncidentResponse(
-    val id:Int,
+    val id:Long,
     //val documentId:String,
     val attributes: IncidentAttributes
 )
@@ -38,7 +38,7 @@ data class IncidentAttributes(
     val evidence: Media?,
     val latitude: Double?,
     val longitude: Double?,
-    val localId:Int
+    val localId:Long
 )
 
 data class Media(
@@ -61,7 +61,7 @@ data class CreateIncidentPayloadDataWrapper(
 )
 // Cuerpo
 data class CreateIncidentPayload(
-    val localId: Int,
+    val localId: Long,
     val description: String,
     val solved: Boolean,
     val latitude: Double?=null,

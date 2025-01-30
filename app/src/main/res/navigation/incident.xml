@@ -47,6 +47,6 @@
         tools:layout="@layout/fragment_incident_maps" >
         <argument
             android:name="incidentId"
-            app:argType="integer" />
+            app:argType="long" />
     </fragment>
 </navigation>

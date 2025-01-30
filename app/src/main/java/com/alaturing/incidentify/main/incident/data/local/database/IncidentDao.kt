@@ -13,14 +13,17 @@ interface IncidentDao {
     suspend fun updateIncident(incident: IncidentEntity):Int
 
     @Insert
-    suspend fun insertIncident(incident: IncidentEntity)
+    suspend fun insertIncident(incident: IncidentEntity):Long
+
+    @Insert(entity = IncidentEntity::class)
+    suspend fun insertIncident(newIncident:NewIncidentEntity):Long
 
     @Query("SELECT * FROM incident")
     suspend fun readAllIncidents():List<IncidentEntity>
     @Query("SELECT * FROM incident")
     fun observeIncidents(): Flow<List<IncidentEntity>>
     @Query("SELECT * FROM incident WHERE localId = :id")
-    suspend fun readOne(id:Int):IncidentEntity?
+    suspend fun readOne(id:Long):IncidentEntity?
 
     @Query("SELECT * FROM incident WHERE isSynch = :isSynch")
     suspend fun readBySynch(isSynch:Boolean):List<IncidentEntity>

@@ -12,7 +12,7 @@ interface IncidentRemoteDatasource {
      * @return Resultado de lista de incidentes
      */
     suspend fun createOne(
-        localId:Int,
+        localId:Long,
         description:String,
                           evidence: Uri?,
                           latitude:Double?,

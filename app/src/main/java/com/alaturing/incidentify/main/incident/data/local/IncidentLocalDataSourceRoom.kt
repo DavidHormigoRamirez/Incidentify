@@ -1,6 +1,7 @@
 package com.alaturing.incidentify.main.incident.data.local
 
 
+import android.net.Uri
 import com.alaturing.incidentify.common.exception.IncidentNotFoundException
 import com.alaturing.incidentify.common.exception.NoUnsynchedIncidentsException
 import com.alaturing.incidentify.main.incident.data.local.database.IncidentDao
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import android.util.Log
+import com.alaturing.incidentify.common.exception.IncidentNotCreatedException
+import com.alaturing.incidentify.main.incident.data.local.database.NewIncidentEntity
 
 class IncidentLocalDataSourceRoom @Inject constructor(
     private val dao: IncidentDao
@@ -20,7 +23,7 @@ class IncidentLocalDataSourceRoom @Inject constructor(
         return Result.success(incidents)
     }
 
-    override suspend fun readOne(id: Int): Result<Incident> {
+    override suspend fun readOne(id: Long): Result<Incident> {
         val entity:IncidentEntity? = dao.readOne(id)
 
         entity?.let {
@@ -34,6 +37,27 @@ class IncidentLocalDataSourceRoom @Inject constructor(
         return Result.success(incident)
     }
 
+    override suspend fun createOne(
+        description: String,
+        latitude: Double?,
+        longitude: Double?,
+        evidence: Uri?
+    ): Result<Incident> {
+        val id = dao.insertIncident(NewIncidentEntity(
+            description = description,
+            latitude = latitude,
+            longitude = longitude,
+            photoUri = evidence.toString(),
+        ))
+        val incident = dao.readOne(id)?.toExternal()
+        return if (incident!=null) {
+            Result.success(incident)
+        } else {
+            Result.failure(IncidentNotCreatedException())
+        }
+
+
+    }
 
 
     override fun observeAll(): Flow<Result<List<Incident>>> {

@@ -1,11 +1,19 @@
 package com.alaturing.incidentify.main.incident.data.local
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.alaturing.incidentify.R
+import com.alaturing.incidentify.main.MainActivity.Companion.CHANNEL_ID
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
+import com.alaturing.incidentify.main.incident.model.Incident
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 
@@ -13,8 +21,8 @@ import dagger.assisted.AssistedInject
 class UploadIncidentWorker
     @AssistedInject constructor(
 
-        @Assisted appContext:Context,
-        @Assisted params: WorkerParameters,
+        @Assisted val appContext:Context,
+        @Assisted val params: WorkerParameters,
         val localDS: IncidentLocalDatasource,
         val remoteDS: IncidentRemoteDatasource,
 
@@ -51,6 +59,9 @@ class UploadIncidentWorker
                 }
                 // Ha ido bien, la marcamos como sincronizada
                 else {
+
+                    sendUploadNotification(incident)
+
                     localDS.markAsSynched(incident)
                 }
             }
@@ -62,6 +73,28 @@ class UploadIncidentWorker
                 Log.d("DHR-WORKER","Some entries will be retried ...")
                 Result.retry()
             }
+        }
+    }
+
+    private fun sendUploadNotification(incident: Incident) {
+        val builder = NotificationCompat.Builder(appContext, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_cloud_sync)
+            .setContentTitle("Incidente Sincronizado")
+            .setContentText("El inciddente ${incident.description} ha sido sincroinzado")
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+        builder.build()
+
+        with(NotificationManagerCompat.from(appContext)) {
+            if (ActivityCompat.checkSelfPermission(
+                    appContext,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+
+                return@with
+            }
+            // notificationId is a unique int for each notification that you must define.
+            notify(incident.localId.toInt(), builder.build())
         }
     }
 

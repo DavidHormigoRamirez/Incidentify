@@ -15,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 /**
- * A simple [Fragment] subclass.
+ * [Fragment] para mostrar una lista de incidentes
 */
 @AndroidEntryPoint
 class IncidentsFragment : Fragment() {
@@ -39,8 +39,9 @@ class IncidentsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // TODO Añadir callback para navegar
+
         val adapter = IncidentsAdapter(::toIncidentMap)
+
         val rv = binding.incidentRv
         rv.adapter = adapter
         viewLifecycleOwner.lifecycleScope.launch {
@@ -71,7 +72,7 @@ class IncidentsFragment : Fragment() {
 
     }
 
-    private fun toIncidentMap(id:Int) {
+    private fun toIncidentMap(id:Long) {
         val action = IncidentsFragmentDirections.actionIncidentsFragmentToIncidentMapsFragment(id)
         findNavController().navigate(action)
     }

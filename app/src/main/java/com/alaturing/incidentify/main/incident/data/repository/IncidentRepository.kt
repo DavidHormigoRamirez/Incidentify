@@ -8,7 +8,7 @@ interface IncidentRepository {
 
     suspend fun readAll():Result<List<Incident>>
 
-    suspend fun readOne(id:Int):Result<Incident>
+    suspend fun readOne(id:Long):Result<Incident>
 
     suspend fun createOne(description:String,
                           latitude: Double? = null,
