@@ -10,19 +10,31 @@ import com.alaturing.incidentify.main.incident.model.Incident
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import android.util.Log
 import com.alaturing.incidentify.common.exception.IncidentNotCreatedException
+import com.alaturing.incidentify.main.incident.data.local.database.IncidentSynchronized
 import com.alaturing.incidentify.main.incident.data.local.database.NewIncidentEntity
 
-class IncidentLocalDataSourceRoom @Inject constructor(
+/**
+ * [IncidentLocalDatasource] Implementation that uses Room as local persistence
+ */
+class IncidentLocalDataSourceRoom
+@Inject constructor(
     private val dao: IncidentDao
 ):IncidentLocalDatasource {
 
+    /**
+     * Read all incidents stored in the Room database
+     * @return All local incidents
+     */
     override suspend fun readAll(): Result<List<Incident>> {
         val incidents = dao.readAllIncidents().map(IncidentEntity::toExternal)
         return Result.success(incidents)
     }
 
+    /**
+     * Reads an incident by primary key
+     * @return Success if the incident exists, Failure otherwise
+     */
     override suspend fun readOne(id: Long): Result<Incident> {
         val entity:IncidentEntity? = dao.readOne(id)
 
@@ -32,11 +44,21 @@ class IncidentLocalDataSourceRoom @Inject constructor(
         return Result.failure(IncidentNotFoundException())
     }
 
+    /**
+     * Creates a single incident
+     * @return Success if created, Failure otherwise
+     */
     override suspend fun createOne(incident: Incident): Result<Incident> {
-        dao.insertIncident(incident.toEntity())
-        return Result.success(incident)
+        val localId = dao.insertIncident(incident.toEntity())
+        return if (localId>0)
+            Result.success(incident)
+        else
+            Result.failure(IncidentNotFoundException())
     }
-
+    /**
+     * Creates a single incident
+     * @return Success if created, Failure otherwise
+     */
     override suspend fun createOne(
         description: String,
         latitude: Double?,
@@ -63,13 +85,13 @@ class IncidentLocalDataSourceRoom @Inject constructor(
     override fun observeAll(): Flow<Result<List<Incident>>> {
         return dao.observeIncidents().map {
             entities ->
-            val incidents = entities.toExternal()
-            Result.success(incidents)
+                val incidents = entities.toExternal()
+                Result.success(incidents)
 
         }
     }
 
-    override suspend fun readUnsynched(): Result<List<Incident>> {
+    override suspend fun readUnsynchronized(): Result<List<Incident>> {
         val entities = dao.readBySynch(false)
         return if (entities.isEmpty()) {
             Result.failure(NoUnsynchedIncidentsException())
@@ -79,20 +101,23 @@ class IncidentLocalDataSourceRoom @Inject constructor(
         }
     }
 
-    override suspend fun markAsSynched(incident: Incident):Result<Incident> {
-        val entity = incident.toEntity()
-        val updatedEntity = entity.copy(
-            isSynch = true
+    /**
+     * Marks a single entity as synchronized
+     * @return the updated entity, failure if not found
+     */
+    override suspend fun markAsSynchronized(incident: Incident):Result<Incident> {
+
+        val isUpdated = dao.updateSynchronized(
+            IncidentSynchronized(
+                localId = incident.localId,
+                isSynch = true
+            )
         )
-        val isUpdated = dao.updateIncident(updatedEntity)
-        if (isUpdated>0) {
-            Log.d("DHR","Entity updated")
-            Log.d("DHR",updatedEntity.toString())
-            return Result.success(updatedEntity.toExternal())
-        }
-        else {
-            Log.e("DHR","Entity not updated")
-            return Result.failure(IncidentNotFoundException())
+
+        return if (isUpdated>0) {
+            Result.success(dao.readOne(incident.localId)!!.toExternal())
+        } else {
+            Result.failure(IncidentNotFoundException())
         }
     }
 }

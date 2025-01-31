@@ -17,6 +17,9 @@
     <string name="select_photo">Select photo</string>
     <string name="incident_captured_image">Incident captured image</string>
     <string name="take_picture">Take picture</string>
+    <string name="no_camera_persmissions">No camera permissions</string>
+    <string name="notification_title">Incidentify</string>
+    <string name="updated_notification_content">Incidente %s uploaded</string>
     <plurals name="reported">
         <item quantity="zero">No reported incidents</item>
         <item quantity="one">%d reported incident</item>

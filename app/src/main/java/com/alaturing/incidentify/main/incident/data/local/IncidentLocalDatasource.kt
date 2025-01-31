@@ -4,16 +4,14 @@ import android.net.Uri
 import com.alaturing.incidentify.main.incident.model.Incident
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Interface for local data sources
+ */
 interface IncidentLocalDatasource {
 
-    // Métodos incidentes
     suspend fun readAll():Result<List<Incident>>
     suspend fun readOne(id:Long):Result<Incident>
-    /**
-     * @return Resultado de lista de incidentes
-     */
     suspend fun createOne(incident:Incident):Result<Incident>
-
     suspend fun createOne(
         description:String,
         latitude:Double?,
@@ -21,8 +19,6 @@ interface IncidentLocalDatasource {
         evidence: Uri?,
     ):Result<Incident>
     fun observeAll(): Flow<Result<List<Incident>>>
-
-    suspend fun readUnsynched():Result<List<Incident>>
-
-    suspend fun markAsSynched(incident:Incident):Result<Incident>
+    suspend fun readUnsynchronized():Result<List<Incident>>
+    suspend fun markAsSynchronized(incident:Incident):Result<Incident>
 }

@@ -11,6 +11,8 @@ interface IncidentDao {
 
     @Update
     suspend fun updateIncident(incident: IncidentEntity):Int
+    @Update(entity = IncidentEntity::class)
+    suspend fun updateSynchronized(vararg synchronized: IncidentSynchronized):Int
 
     @Insert
     suspend fun insertIncident(incident: IncidentEntity):Long

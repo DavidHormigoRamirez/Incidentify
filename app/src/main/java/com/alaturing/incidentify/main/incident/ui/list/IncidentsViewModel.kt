@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 /**
@@ -16,27 +16,22 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class IncidentsViewModel @Inject constructor(
-    private val repository: IncidentRepository
+    repository: IncidentRepository
 ):ViewModel() {
 
-    private val _uiState = MutableStateFlow<IncidentsUiState>(IncidentsUiState.Initial)
-    val uiState: StateFlow<IncidentsUiState>
-        get() = _uiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            repository.observeAll().collect {
-                incidents ->
-                    if (incidents.isSuccess) {
-                        _uiState.value = IncidentsUiState.Success(incidents.getOrNull()!!)
-                    }
-                    else
-                    {
-                        // TODO
-                        _uiState.value = IncidentsUiState.Error("Error recuperando")
-                    }
-
+    // Como no manipilamos nunca el flujo, salvo convertir a estado de pantalla
+    // usamos esta sintaxis
+    val uiState: StateFlow<IncidentsUiState> = repository.observeAll().map {
+        result ->
+            if (result.isSuccess) {
+                IncidentsUiState.Success(result.getOrNull()!!)
             }
-        }
-    }
+            else {
+                IncidentsUiState.Error(result.exceptionOrNull()!!.message!!)
+            }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        IncidentsUiState.Initial
+    )
 }

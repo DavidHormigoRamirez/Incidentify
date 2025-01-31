@@ -11,37 +11,48 @@ import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.alaturing.incidentify.R
+import com.alaturing.incidentify.common.exception.NoUnsynchedIncidentsException
 import com.alaturing.incidentify.main.MainActivity.Companion.CHANNEL_ID
 import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
 import com.alaturing.incidentify.main.incident.model.Incident
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
+/**
+ * [CoroutineWorker] to synchronize local incidents to the remote backend
+ */
 @HiltWorker
-class UploadIncidentWorker
-    @AssistedInject constructor(
-
+class UploadIncidentWorker @AssistedInject constructor(
         @Assisted val appContext:Context,
         @Assisted val params: WorkerParameters,
-        val localDS: IncidentLocalDatasource,
-        val remoteDS: IncidentRemoteDatasource,
-
+        private val localDS: IncidentLocalDatasource,
+        private val remoteDS: IncidentRemoteDatasource,
     ): CoroutineWorker(appContext,params) {
 
-
+    /**
+     * Function to upload incidents
+     */
     override suspend fun doWork(): Result {
+
         Log.d("DHR-WORKER","Starting background processing ...")
-        val result = localDS.readUnsynched()
-        // No hay incidentes
+        // Query the local database for unsynchronized incidents
+        val result = localDS.readUnsynchronized()
+        // Check if there are no incidents to upload
         return if (result.isFailure) {
-            // TODO Comprobar excepcion
-            //unsychedIncidents.exceptionOrNull()
-            Result.success()
+            // We verify the exception matches the no incidents
+            val exception = result.exceptionOrNull()
+            exception?.let {
+                if (it is NoUnsynchedIncidentsException)
+                    Result.success()
+            }
+            Result.failure()
 
         }
-        // Hay incidentes que subir
+        // We upload unsynchronized local incidents
         else {
-            // Obtenemos las incidencais no sincronizadas
+
             val unsyched = result.getOrNull()!!
             var allSynched = true
             // Por cada una, la subimos al remoto
@@ -53,16 +64,18 @@ class UploadIncidentWorker
                     latitude = incident.latitude,
                     longitude = incident.longitude
                 )
-                // Si alguna va mal, consideramos la subida incorrecta
+                // Something went wrong during the upload
+
                 if (uploaded.isFailure) {
                     allSynched = false
                 }
                 // Ha ido bien, la marcamos como sincronizada
                 else {
-
+                    withContext(Dispatchers.IO) {
+                        localDS.markAsSynchronized(incident)
+                    }
                     sendUploadNotification(incident)
 
-                    localDS.markAsSynched(incident)
                 }
             }
             return if (allSynched) {
@@ -76,24 +89,28 @@ class UploadIncidentWorker
         }
     }
 
+    /**
+     * Function to send a notification
+     */
     private fun sendUploadNotification(incident: Incident) {
-        val builder = NotificationCompat.Builder(appContext, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_cloud_sync)
-            .setContentTitle("Incidente Sincronizado")
-            .setContentText("El inciddente ${incident.description} ha sido sincroinzado")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-        builder.build()
 
+        // Send the notification only if we have permissions
         with(NotificationManagerCompat.from(appContext)) {
             if (ActivityCompat.checkSelfPermission(
                     appContext,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-
                 return@with
             }
-            // notificationId is a unique int for each notification that you must define.
+            // New notification: Incident updated
+            val builder = NotificationCompat.Builder(appContext, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_cloud_sync)
+                .setContentTitle(appContext.getString(R.string.notification_title))
+                .setContentText(appContext.getString(R.string.updated_notification_content,incident.description))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            builder.build()
+            // we use the local id of the incident
             notify(incident.localId.toInt(), builder.build())
         }
     }

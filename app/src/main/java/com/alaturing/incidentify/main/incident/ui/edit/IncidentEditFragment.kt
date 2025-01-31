@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import coil3.load
+import com.alaturing.incidentify.R
 import com.alaturing.incidentify.databinding.FragmentIncidentEditBinding
 import com.google.android.gms.location.FusedLocationProviderClient
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,9 +29,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
+
 @AndroidEntryPoint
 class IncidentEditFragment @Inject constructor() : Fragment() {
 
+    /**
+     * Valor de la URI Seleccionada
+     */
     private var _photoUri:Uri? = null
     private val viewModel: IncidentEditViewModel by activityViewModels()
     @Inject
@@ -44,7 +48,7 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
                 navigateToCamera()
             else
                 Toast.makeText(requireContext(),
-                    "No hay permisos para la camara",
+                    getText(R.string.no_camera_persmissions),
                     Toast.LENGTH_LONG,
                     ).show()
     }
@@ -62,7 +66,7 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
         }
         // SILENCIOSO
         if (!hasPermissions) {
-            Toast.makeText(requireContext(), "No tienes permisos", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), getString(R.string.no_camera_persmissions), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -70,12 +74,8 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
     // Registramos el fragmento como receptor de un seleccionador de media
     val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         // Si la uril no es nula, es que el usuario ha selccionado algín archivo
-        if (uri != null) {
-            // Lo carcagmos en el ImageView
-            //binding.incidentImage.load(uri)
-            loadPhoto(uri)
-        } else {
-            Log.d("PhotoPicker", "No media selected")
+        uri?.let {
+            loadPhoto(it)
         }
     }
 
@@ -144,7 +144,6 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
 
         // Manejador evento de creación
         binding.saveIncidentBtn.setOnClickListener {
-            var currentLocation: Location? = null
             viewLifecycleOwner.lifecycleScope.launch {
 
                 if (hasMapPermissions()) {
@@ -171,9 +170,7 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
                 viewModel.photo.collect {
                     photoUri ->
                         when(photoUri) {
-                            Uri.EMPTY -> {
-                                //No hay foto, podemos poner un placeholder en la imagen
-                            }
+                            Uri.EMPTY -> {}
                             else -> {
                                 // tenemos foto, la ponemos en la UI aprovechando
                                 // que tenemos Coil
@@ -197,10 +194,6 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
      * @return Si tiene permisos para usar la camara
      */
     private fun hasCameraPermissions(context: Context) =
-        // Tenemos permiso si todos los permisos han sido concecidos
-        //return PERMISSIONS_REQUIRED.all { p ->
-        //    ContextCompat.checkSelfPermission(context, p) == PackageManager.PERMISSION_GRANTED
-        //}
         ContextCompat.checkSelfPermission(context,Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
 
     /**
@@ -219,9 +212,9 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
     }
 
     companion object {
-        val  MAP_REQUIRED_PERMISSIONS = arrayOf(
-        Manifest.permission.ACCESS_COARSE_LOCATION,
-        Manifest.permission.ACCESS_FINE_LOCATION
+        val MAP_REQUIRED_PERMISSIONS = arrayOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
         )
     }
 }

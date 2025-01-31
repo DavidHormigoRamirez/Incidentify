@@ -26,3 +26,8 @@ data class NewIncidentEntity(
     val longitude: Double?,
     val photoUri: String?
 )
+
+data class IncidentSynchronized(
+    val localId:Long,
+    val isSynch:Boolean
+)
