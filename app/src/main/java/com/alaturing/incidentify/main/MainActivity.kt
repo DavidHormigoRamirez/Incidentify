@@ -1,6 +1,7 @@
 package com.alaturing.incidentify.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.os.Build
 import android.os.Bundle
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding:ActivityMainBinding
     private lateinit var navViewModel: NavigationSharedViewModel
+    @SuppressLint("InlinedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -52,11 +54,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         /**
-         * Permisos para notificaciones
+         * Ask for permissions to send notifications
          */
         notificationsPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         registerNotificationChannel()
 
+        // Bottom navigation setup
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.main_navigation_area) as NavHostFragment
         val navController = navHostFragment.navController
@@ -79,7 +82,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // Capturamos las navegaciones
+        // We capture every navigation to check if the bottom toolbar must be hidden
         navController.addOnDestinationChangedListener {
             _,destination,_ ->
                 val hideNavbar = destination.arguments["hideNavbar"]
@@ -91,19 +94,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Function to register the app general notification channel
+     */
     private fun registerNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // Create the NotificationChannel.
-            val name = "Trabajo en remoto"
-            val descriptionText = "Notificaciones de sincronización"
+
+            val name = getText(R.string.general_channel_name)
+            val descriptionText = getText(R.string.general_channel_desc).toString()
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val mChannel = NotificationChannel(CHANNEL_ID, name, importance)
             mChannel.description = descriptionText
-            // Register the channel with the system. You can't change the importance
-            // or other notification behaviors after this.
+            // Register the channel with the system.
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
-        }
+
     }
     companion object {
         const val CHANNEL_ID = "incidentify_default"

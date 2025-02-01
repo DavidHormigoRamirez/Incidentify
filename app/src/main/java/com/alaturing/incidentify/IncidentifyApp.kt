@@ -13,10 +13,15 @@ class IncidentifyApp: Application(), Configuration.Provider {
 
 
 
-    override fun getWorkManagerConfiguration(): Configuration {
+    /**override fun getWorkManagerConfiguration(): Configuration {
         return Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
-    }
+    }*/
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 
 }

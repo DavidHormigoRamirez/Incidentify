@@ -107,12 +107,17 @@ class IncidentLocalDataSourceRoom
      */
     override suspend fun markAsSynchronized(incident: Incident):Result<Incident> {
 
-        val isUpdated = dao.updateSynchronized(
+        val entity = incident.toEntity()
+        val synchedEntity = entity.copy(
+            isSynch = true
+        )
+        val isUpdated = dao.updateIncident(synchedEntity)
+        /*val isUpdated = dao.updateSynchronized(
             IncidentSynchronized(
                 localId = incident.localId,
                 isSynch = true
             )
-        )
+        )*/
 
         return if (isUpdated>0) {
             Result.success(dao.readOne(incident.localId)!!.toExternal())

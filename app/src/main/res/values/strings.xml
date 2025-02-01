@@ -20,6 +20,8 @@
     <string name="no_camera_persmissions">No camera permissions</string>
     <string name="notification_title">Incidentify</string>
     <string name="updated_notification_content">Incidente %s uploaded</string>
+    <string name="general_channel_name">General</string>
+    <string name="general_channel_desc">Incidentify notifictions</string>
     <plurals name="reported">
         <item quantity="zero">No reported incidents</item>
         <item quantity="one">%d reported incident</item>
