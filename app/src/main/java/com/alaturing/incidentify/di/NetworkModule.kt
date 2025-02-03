@@ -17,7 +17,7 @@ import javax.inject.Singleton
 
 
 /**
- * Modulo de Hilt para la red
+ * [Module] to satisfy networking dependencies
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -39,13 +39,14 @@ class NetworkModule {
      */
     @Provides
     @AuthInterceptorOkHttpClient
-    fun provideAutenticationInterceptor(userLocalDS: UserLocalDatasource): Interceptor {
+    fun provideAuthenticationInterceptor(userLocalDS: UserLocalDatasource): Interceptor {
         return AuthenticationInterceptor(userLocalDS)
     }
 
     /**
-     * @param interceptor
-     * @return [OkHttpClient] cliente de OkHttp con el interceptor añadido
+     * Provides a customized [OkHttpClient]
+     * @param interceptor Authentication interceptor
+     * @return [OkHttpClient] Customized HTTP Client
      */
     @Provides
     @Singleton

@@ -1,33 +1,27 @@
 package com.alaturing.incidentify.di
 
-
-import android.content.Context
-import androidx.work.WorkManager
 import com.alaturing.incidentify.authentication.data.repository.UserRepository
 import com.alaturing.incidentify.authentication.data.repository.UserRepositoryDefault
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceDS
-import com.alaturing.incidentify.main.incident.data.repository.IncidentRepository
-import com.alaturing.incidentify.main.incident.data.repository.IncidentRepositoryDefault
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasourceStrapi
-import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDataSourceRoom
-import com.alaturing.incidentify.main.incident.data.local.IncidentLocalDatasource
-import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasource
-import com.alaturing.incidentify.main.incident.data.remote.IncidentRemoteDatasourceStrapi
+import com.alaturing.incidentify.incident.data.local.IncidentLocalDataSourceRoom
+import com.alaturing.incidentify.incident.data.local.IncidentLocalDatasource
+import com.alaturing.incidentify.incident.data.remote.IncidentRemoteDatasource
+import com.alaturing.incidentify.incident.data.remote.IncidentRemoteDatasourceStrapi
+import com.alaturing.incidentify.incident.data.repository.IncidentRepository
+import com.alaturing.incidentify.incident.data.repository.IncidentRepositoryDefault
 
 import dagger.Binds
 import dagger.Module
-import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
- * Módulo de Hilt para satisfacer dependecias
- * Lo hace a nivel de SingletonComponent para que tenga validez
- * durante toda la aplicación
+ * Hilt [Module] to satisfy app level dependencies
+ *
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -43,7 +37,7 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindIncidentRepository(r:IncidentRepositoryDefault):IncidentRepository
+    abstract fun bindIncidentRepository(r: IncidentRepositoryDefault): IncidentRepository
 
     /**
      * Provee la fuente de datos remota para usuarios
@@ -54,11 +48,11 @@ abstract class AppModule {
 
     @Binds
     @Singleton
-    abstract fun bindIncidentRemoteDatasource(ds:IncidentRemoteDatasourceStrapi): IncidentRemoteDatasource
+    abstract fun bindIncidentRemoteDatasource(ds: IncidentRemoteDatasourceStrapi): IncidentRemoteDatasource
 
     @Binds
     @Singleton
-    abstract fun bindIncidentLocalDatasource(ds:IncidentLocalDataSourceRoom):IncidentLocalDatasource
+    abstract fun bindIncidentLocalDatasource(ds: IncidentLocalDataSourceRoom): IncidentLocalDatasource
     /**
      * Provee la fuente de datos local para usuarios
      */

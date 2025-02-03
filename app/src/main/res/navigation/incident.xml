@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/incidentsFragment"
-        android:name="com.alaturing.incidentify.main.incident.ui.list.IncidentsFragment"
+        android:name="com.alaturing.incidentify.incident.ui.list.IncidentsFragment"
         android:label="fragment_incidents"
         tools:layout="@layout/fragment_incidents" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/incidentEditFragment"
-        android:name="com.alaturing.incidentify.main.incident.ui.edit.IncidentEditFragment"
+        android:name="com.alaturing.incidentify.incident.ui.edit.IncidentEditFragment"
         android:label="fragment_incident_edit"
         tools:layout="@layout/fragment_incident_edit" >
         <argument
@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/cameraPreviewFragment"
-        android:name="com.alaturing.incidentify.main.incident.ui.edit.CameraPreviewFragment"
+        android:name="com.alaturing.incidentify.incident.ui.edit.CameraPreviewFragment"
         android:label="fragment_camera_preview"
         tools:layout="@layout/fragment_camera_preview" >
         <argument
@@ -42,7 +42,7 @@
     </fragment>
     <fragment
         android:id="@+id/incidentMapsFragment"
-        android:name="com.alaturing.incidentify.main.incident.ui.edit.IncidentMapsFragment"
+        android:name="com.alaturing.incidentify.incident.ui.edit.IncidentMapsFragment"
         android:label="fragment_incident_maps"
         tools:layout="@layout/fragment_incident_maps" >
         <argument

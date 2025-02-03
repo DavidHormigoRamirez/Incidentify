@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".main.MainActivity"
+            android:name=".incident.MainActivity"
             android:exported="false" />
         <!-- If you want to disable android.startup completely. -->
 

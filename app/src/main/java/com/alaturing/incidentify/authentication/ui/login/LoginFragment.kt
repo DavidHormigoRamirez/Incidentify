@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
 import com.alaturing.incidentify.databinding.FragmentLoginBinding
-import com.alaturing.incidentify.main.MainActivity
+import com.alaturing.incidentify.incident.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
