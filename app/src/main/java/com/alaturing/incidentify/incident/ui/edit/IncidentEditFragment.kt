@@ -110,7 +110,12 @@ class IncidentEditFragment @Inject constructor() : Fragment() {
                             // Se ha creado el incidente, volvemos
                             findNavController().popBackStack()
                         }
+                        // An error ocurred, show it on screen
                         is IncidentEditUiState.Error -> {
+                            Toast.makeText(requireContext(),
+                                uiState.message,
+                                Toast.LENGTH_LONG)
+                                .show()
 
                         }
                         IncidentEditUiState.New -> {

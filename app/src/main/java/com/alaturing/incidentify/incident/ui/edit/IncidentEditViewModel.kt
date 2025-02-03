@@ -44,11 +44,18 @@ class IncidentEditViewModel @Inject constructor(
 
     }
 
-    @SuppressLint("MissingPermission")
+    //@SuppressLint("MissingPermission")
+    /**
+     * Function to create a new incident
+     * @param description Description of the incident
+     * @param evidence Uri of the photo with the incident uri
+     * @param location Geocoordinates of the incident
+     */
     fun onSaveNewIncident(description:String, evidence:Uri?, location:Location?=null) {
 
         viewModelScope.launch {
 
+            // We call the repository t
             val result = repository.createOne(
                 description,
                 location?.latitude,
@@ -58,6 +65,9 @@ class IncidentEditViewModel @Inject constructor(
             if (result.isSuccess) {
                 // TODO CAmbiar para emitir todo el incidnete
                 _uiState.value = IncidentEditUiState.Created(result.getOrNull()!!.localId)
+            }
+            else {
+                _uiState.value = IncidentEditUiState.Error("Error creating incident")
             }
         }
 
