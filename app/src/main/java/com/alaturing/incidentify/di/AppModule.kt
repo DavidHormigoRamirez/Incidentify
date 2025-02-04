@@ -6,6 +6,7 @@ import com.alaturing.incidentify.authentication.data.local.UserLocalDatasource
 import com.alaturing.incidentify.authentication.data.local.UserLocalDatasourceDS
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasource
 import com.alaturing.incidentify.authentication.data.remote.UserRemoteDatasourceStrapi
+import com.alaturing.incidentify.authentication.data.repository.UserRepositoryFirebase
 import com.alaturing.incidentify.incident.data.local.IncidentLocalDataSourceRoom
 import com.alaturing.incidentify.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.incident.data.remote.IncidentRemoteDatasource
@@ -33,7 +34,8 @@ abstract class AppModule {
      */
     @Binds
     @Singleton
-    abstract fun bindUserRepository(r: UserRepositoryDefault): UserRepository
+    abstract fun bindUserRepository(r: UserRepositoryFirebase): UserRepository
+    //abstract fun bindUserRepository(r: UserRepositoryDefault): UserRepository
 
     @Binds
     @Singleton

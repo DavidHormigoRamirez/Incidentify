@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "712458236545",
+    "project_id": "incidentify-44e7b",
+    "storage_bucket": "incidentify-44e7b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:712458236545:android:a730128db8471158d61380",
+        "android_client_info": {
+          "package_name": "com.alaturing.incidentify"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY4i1VcmRr4tYaXRj551kWs1618-2Vb8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
