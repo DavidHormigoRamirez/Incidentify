@@ -9,6 +9,7 @@ import androidx.work.WorkRequest
 import com.alaturing.incidentify.common.exception.IncidentNotCreatedException
 import com.alaturing.incidentify.incident.data.local.IncidentLocalDatasource
 import com.alaturing.incidentify.incident.data.local.UploadIncidentWorker
+import com.alaturing.incidentify.incident.data.local.toEntity
 import com.alaturing.incidentify.incident.data.remote.IncidentRemoteDatasource
 import com.alaturing.incidentify.incident.model.Incident
 import kotlinx.coroutines.flow.Flow
@@ -21,6 +22,23 @@ class IncidentRepositoryDefault @Inject constructor(
     //@ApplicationContext private val context: Context
     private val workManager: WorkManager
 ):IncidentRepository {
+
+
+    override suspend fun refreshIncidents() {
+
+        val response = remote.readAll()
+        // If remote
+        if (response.isSuccess) {
+            val incidents = response.getOrNull()!!
+            /**for (incident in incidents) {
+                val entity = incident.toEntity()
+
+            }*/
+            local.createAll(incidents)
+
+        }
+    }
+
     override suspend fun readAll(): Result<List<Incident>> {
         val result = remote.readAll()
 

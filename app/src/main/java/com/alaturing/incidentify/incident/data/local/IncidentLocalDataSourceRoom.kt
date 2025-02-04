@@ -20,6 +20,10 @@ class IncidentLocalDataSourceRoom
 @Inject constructor(
     private val dao: IncidentDao
 ):IncidentLocalDatasource {
+    override suspend fun createAll(incidents: List<Incident>) {
+        val entities = incidents.toEntity()
+        dao.insertAll(entities)
+    }
 
     /**
      * Read all incidents stored in the Room database

@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface IncidentRepository {
 
+    suspend fun refreshIncidents()
+
     suspend fun readAll():Result<List<Incident>>
 
     suspend fun readOne(id:Long):Result<Incident>

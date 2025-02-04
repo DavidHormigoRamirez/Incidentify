@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
  */
 interface IncidentLocalDatasource {
 
+    suspend fun createAll(incidents:List<Incident>)
     suspend fun readAll():Result<List<Incident>>
     suspend fun readOne(id:Long):Result<Incident>
     suspend fun createOne(incident:Incident):Result<Incident>

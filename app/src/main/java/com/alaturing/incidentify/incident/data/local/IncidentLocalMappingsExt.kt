@@ -4,6 +4,9 @@ import androidx.core.net.toUri
 import com.alaturing.incidentify.incident.data.local.database.IncidentEntity
 import com.alaturing.incidentify.incident.model.Incident
 
+fun List<Incident>.toEntity():List<IncidentEntity> {
+    return this.map(Incident::toEntity)
+}
 fun Incident.toEntity(): IncidentEntity {
     return IncidentEntity(
 

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -34,4 +35,11 @@ class IncidentsViewModel @Inject constructor(
         SharingStarted.Lazily,
         IncidentsUiState.Initial
     )
+
+    init {
+        // Refresh the local database
+        viewModelScope.launch {
+            repository.refreshIncidents()
+        }
+    }
 }

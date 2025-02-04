@@ -12,7 +12,6 @@ import com.alaturing.incidentify.incident.data.remote.model.CreateIncidentPayloa
 import com.alaturing.incidentify.incident.data.remote.model.CreateIncidentPayloadDataWrapper
 import com.alaturing.incidentify.incident.data.remote.model.toExternal
 import com.alaturing.incidentify.incident.model.Incident
-import com.alaturing.incidentify.incident.data.remote.model.toModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -37,7 +36,7 @@ class IncidentRemoteDatasourceStrapi @Inject constructor(
     override suspend fun readAll(): Result<List<Incident>> {
         val response = api.incidentReadAll()
         return if (response.isSuccessful) {
-            Result.success(response.body()!!.data.toModel())
+            Result.success(response.body()!!.data.toExternal())
         }
         else {
             return when (response.code()) {

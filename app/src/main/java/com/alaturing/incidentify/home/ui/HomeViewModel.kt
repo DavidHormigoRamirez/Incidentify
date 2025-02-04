@@ -27,6 +27,9 @@ class HomeViewModel @Inject constructor(
     init {
 
         viewModelScope.launch {
+            repository.refreshIncidents()
+        }
+        viewModelScope.launch {
             repository.observeAll().collect {
                 result ->
                     if (result.isSuccess) {

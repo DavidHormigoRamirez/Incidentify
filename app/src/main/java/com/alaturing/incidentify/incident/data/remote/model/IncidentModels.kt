@@ -15,6 +15,7 @@ data class IncidentResponse(
     val attributes: IncidentAttributes
 )
 
+fun List<IncidentResponse>.toExternal(): List<Incident> = map(IncidentResponse::toExternal)
 fun IncidentResponse.toExternal(): Incident {
 
     return Incident(
